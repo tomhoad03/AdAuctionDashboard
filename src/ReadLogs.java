@@ -11,8 +11,8 @@ public class ReadLogs {
             File serverLog = new File("./src/csv/server_log.csv");
 
             readImpressionLog(impressionLog);
-            readClickLog(clickLog);
-            readServerLog(serverLog);
+            //readClickLog(clickLog);
+            //readServerLog(serverLog);
 
         // File not found
         } catch (Exception e) {
@@ -59,7 +59,22 @@ public class ReadLogs {
     }
 
     public static void readServerLog(File serverLog) throws FileNotFoundException {
+        // Declares impression log reader, ignores the first line (not data)
+        Scanner serverReader = new Scanner(serverLog);
+        serverReader.nextLine();
 
+        // Reads the file line-by-line
+        while (serverReader.hasNextLine()) {
+            String nextLine = serverReader.nextLine();
+            String [] splitLine = nextLine.split(",");
+
+            // Prints contents
+            System.out.println("Entrey Date: " + splitLine [0] +
+                    ", ID: " + splitLine [1] +
+                    ", Exit Date: " + splitLine [2] +
+                    ", Pages Viewed: " + splitLine [3] +
+                    ", Conversation: " + splitLine [4]);
+        }
     }
 }
 
