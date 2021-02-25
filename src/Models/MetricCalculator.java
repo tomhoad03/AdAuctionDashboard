@@ -28,7 +28,8 @@ public class MetricCalculator {
      Number of uniques: unique people who saw the ad
      Number of Bounces: number of people who clicked away after a while
      Number of Conversions: clicks then acts on ad
-     Total Cost:
+     Total Impressions Cost: cost of impressions
+     Total Click Cost: cost of clicks
      CTR: Click through rate, clicks per impression
      CPA: Cost per acquisition
      CPC: Cost per click
@@ -46,9 +47,9 @@ public class MetricCalculator {
 
     public MetricCalculator() {
         // File names
-        impressionLog = "Logs/impression_log.csv";
-        clickLog = "Logs/click_log.csv";
-        serverLog = "Logs/server_log.csv";
+        impressionLog = "src/Logs/impression_log.csv";
+        clickLog = "src/Logs/click_log.csv";
+        serverLog = "src/Logs/server_log.csv";
 
         calculateMetrics();
         print();
