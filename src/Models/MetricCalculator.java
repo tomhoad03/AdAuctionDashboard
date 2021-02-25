@@ -15,59 +15,86 @@ public class MetricCalculator {
     private double totalClickCost; // total click cost
 
     // To be calculated
-    private int CTR; // number of clicks / number of impressions
-    private int CPA; // total impressions cost / number of conversions
-    private int CPC; // total impression cost / number of clicks
-    private int CPM; // (total impressions cost * 1000) / number of impressions
-    private int bounceRate; // number of bounces / number of clicks
-    int bounceTime = 10; // bounce time, input by user
+    private double ctr; // number of clicks / number of impressions
+    private double cpa; // total impressions cost / number of conversions
+    private double cpc; // total impression cost / number of clicks
+    private double cpm; // (total impressions cost * 1000) / number of impressions
+    private double br; // number of bounces / number of clicks
+    // private int bounceTime = 10; // bounce time, input by user
 
-    // OOP for logs
+    /**
+     Number of impressions: people who saw the ad
+     Number of clicks: people who clicked the ad
+     Number of uniques: unique people who saw the ad
+     Number of Bounces: number of people who clicked away after a while
+     Number of Conversions: clicks then acts on ad
+     Total Cost:
+     CTR: Click through rate, clicks per impression
+     CPA: Cost per acquisition
+     CPC: Cost per click
+     CPM: Cost per thousand impressions
+     Bounce rate
+     */
+
     private Impressions impressions;
     private Clicks clicks;
     private Server server;
 
+    private String impressionLog;
+    private String clickLog;
+    private String serverLog;
+
     public MetricCalculator() {
-        // Files
-        String impressionLog = "src/Logs/impression_log.csv";
-        String clickLog = "src/Logs/click_log.csv";
-        String serverLog = "src/Logs/server_log.csv";
+        // File names
+        impressionLog = "Logs/impression_log.csv";
+        clickLog = "Logs/click_log.csv";
+        serverLog = "Logs/server_log.csv";
 
-        // Classes for files
-        this.impressions = new Impressions(impressionLog);
-        this.clicks = new Clicks(clickLog);
-        this.server = new Server(serverLog);
-
-        this.impressionsNo = impressions.getImpressionNo();
-        this.uniquesNo = impressions.getUniquesNo();
-        this.clicksNo = clicks.getClickNo();
-        this.bounceNo = server.getBounceNo();
-        this.conversionsNo = server.getConversionNo();
-        this.totalImpressionCost = impressions.getTotalCost();
-        this.totalClickCost = clicks.getTotalCost();
+        calculateMetrics();
+        print();
     }
 
-    public static void main(String[] args){
-        MetricCalculator calculator = new MetricCalculator();
+    // Calculates metrics
+    public void calculateMetrics(/*filtering to be added*/) {
+        // Reads the log files
+        impressions = new Impressions(impressionLog);
+        clicks = new Clicks(clickLog);
+        server = new Server(serverLog);
 
-        // Calculation of metrics
-        double ctr = (float) calculator.clicksNo / (float) calculator.impressionsNo;
-        double cpa = calculator.totalImpressionCost / calculator.conversionsNo;
-        double cpc = calculator.totalImpressionCost / calculator.clicksNo;
-        double cpm = (calculator.totalImpressionCost * 1000) / calculator.impressionsNo;
-        double br = (float) calculator.bounceNo / (float) calculator.clicksNo;
+        // Metrics gathered directly from logs
+        impressionsNo = impressions.getImpressionNo();
+        uniquesNo = impressions.getUniquesNo();
+        clicksNo = clicks.getClickNo();
+        bounceNo = server.getBounceNo();
+        conversionsNo = server.getConversionNo();
+        totalImpressionCost = impressions.getTotalCost();
+        totalClickCost = clicks.getTotalCost();
 
-        // Printing of metrics
-        System.out.println("Number of impressions: " + calculator.impressionsNo);
-        System.out.println("Number of clicks: " + calculator.clicksNo);
-        System.out.println("Number of uniques: " + calculator.uniquesNo);
-        System.out.println("Number of bounces: " + calculator.bounceNo);
-        System.out.println("Number of conversions: " + calculator.conversionsNo);
-        System.out.println("Total cost: " + calculator.totalImpressionCost);
+        // Additional metrics calculated from previous metrics
+        ctr = (double) clicksNo / (double) impressionsNo;
+        cpa = totalImpressionCost / conversionsNo;
+        cpc = totalImpressionCost / clicksNo;
+        cpm = (totalImpressionCost * 1000) / impressionsNo;
+        br = (double) bounceNo / (double) clicksNo;
+    }
+
+    // Temporary function to display metrics in terminal
+    public void print() {
+        System.out.println("Number of impressions: " + impressionsNo);
+        System.out.println("Number of clicks: " + clicksNo);
+        System.out.println("Number of uniques: " + uniquesNo);
+        System.out.println("Number of bounces: " + bounceNo);
+        System.out.println("Number of conversions: " + conversionsNo);
+        System.out.println("Total cost: " + totalImpressionCost);
         System.out.println("CTR: " + ctr);
         System.out.println("CPA: " + cpa);
         System.out.println("CPC: " + cpc);
         System.out.println("CPM: " + cpm);
         System.out.println("Bounce Rate: " + br);
+    }
+
+    // Main
+    public static void main(String[] args){
+        MetricCalculator calculator = new MetricCalculator();
     }
 }
