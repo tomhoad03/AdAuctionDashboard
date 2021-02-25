@@ -5,7 +5,7 @@ public class Click {
     private int id; // ~19 digit unique user id
     private double clickCost; // 6 d.p. value (>0)
 
-    public Click(String date, int id, int clickCost) {
+    public Click(String date, int id, double clickCost) {
         this.date = date;
         this.id = id;
         this.clickCost = clickCost;

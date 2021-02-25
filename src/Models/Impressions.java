@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Impressions {
     private int impressionNo; // total impressions
     private int uniques; // total uniques
-    private int totalCost; // total impression cost
+    private double totalCost; // total impression cost
 
     private ArrayList<Impression> impressions;
 
@@ -43,7 +43,6 @@ public class Impressions {
                                                     log[4], // income
                                                     log[5], // context
                                                     impressionCost); // impression cost
-
             impressions.add(impression);
         }
     }
@@ -56,7 +55,7 @@ public class Impressions {
         return uniques;
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return totalCost;
     }
 
