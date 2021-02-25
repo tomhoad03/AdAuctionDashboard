@@ -6,7 +6,7 @@ public class Servers {
     private int bounceNo; // number of bounces
     private int conversionNo; // number of conversions
 
-    private ArrayList<Server> servers; // i hate this and the class naming but cant think of anything better
+    private ArrayList<Server> servers = new ArrayList<>(); // i hate this and the class naming but cant think of anything better
 
     public Servers(String serverLog) {
         // Reads the csv
@@ -25,7 +25,7 @@ public class Servers {
             }
 
             // converting to appropriate types
-            int id = Integer.parseInt(log[1]);
+            long id = Long.parseLong(log[1]);
             int pages = Integer.parseInt(log[3]);
 
             // creates new impression
@@ -36,5 +36,17 @@ public class Servers {
                                         conversion); // conversion
             servers.add(server);
         }
+    }
+
+    public int getBounceNo() {
+        return bounceNo;
+    }
+
+    public int getConversionNo() {
+        return conversionNo;
+    }
+
+    public ArrayList<Server> getServers() {
+        return servers;
     }
 }

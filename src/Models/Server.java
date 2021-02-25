@@ -2,12 +2,12 @@ package Models;
 
 public class Server {
     private String entryDate; // entry date and time
-    private int id; // ~19 digit unique user id
+    private long id; // ~19 digit unique user id
     private String exitDate; // exit date and time
     private int pagesViewed; // num of pages viewed
     private Boolean conversation; // has the user acted after clicking?
 
-    public Server(String entryDate, int id, String exitDate, int pagesViewed, Boolean conversation) {
+    public Server(String entryDate, long id, String exitDate, int pagesViewed, Boolean conversation) {
         this.entryDate = entryDate;
         this.id = id;
         this.exitDate = exitDate;
@@ -23,7 +23,7 @@ public class Server {
         this.entryDate = entryDate;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

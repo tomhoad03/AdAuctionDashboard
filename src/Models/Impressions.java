@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Impressions {
     private int impressionNo; // total impressions
-    private int uniques; // total uniques
+    private int uniquesNo; // total uniques
     private double totalCost; // total impression cost
 
-    private ArrayList<Impression> impressions;
+    private ArrayList<Impression> impressions = new ArrayList<>();
 
     public Impressions(String impressionLog) {
         // Reads the csv
         Reader impressionReader = new Reader(impressionLog);
         impressionReader.getLine(); // removing first line
 
-        ArrayList<Integer> uniqueIds = new ArrayList<>();
+        ArrayList<Long> uniqueIds = new ArrayList<>();
         int count;
 
         // Reading line-by-line
@@ -25,9 +25,9 @@ public class Impressions {
             impressionNo++;
 
             // counting unique impressions
-            int id = Integer.parseInt(log[1]);
+            long id = Long.parseLong(log[1]);
             if (!uniqueIds.contains(id)) {
-                uniques++;
+                uniquesNo++;
                 uniqueIds.add(id);
             }
 
@@ -51,8 +51,8 @@ public class Impressions {
         return impressionNo;
     }
 
-    public int getUniques() {
-        return uniques;
+    public int getUniquesNo() {
+        return uniquesNo;
     }
 
     public double getTotalCost() {

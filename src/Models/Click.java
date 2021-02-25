@@ -2,10 +2,10 @@ package Models;
 
 public class Click {
     private String date; // date and time
-    private int id; // ~19 digit unique user id
+    private long id; // ~19 digit unique user id
     private double clickCost; // 6 d.p. value (>0)
 
-    public Click(String date, int id, double clickCost) {
+    public Click(String date, long id, double clickCost) {
         this.date = date;
         this.id = id;
         this.clickCost = clickCost;
@@ -19,7 +19,7 @@ public class Click {
         this.date = date;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
