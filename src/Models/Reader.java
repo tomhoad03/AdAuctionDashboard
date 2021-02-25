@@ -1,4 +1,4 @@
-package Logs;
+package Models;
 
 import java.io.*;
 

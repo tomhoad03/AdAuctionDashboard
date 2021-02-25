@@ -2,14 +2,14 @@ package Models;
 
 public class Impression {
     private String date; // date and time
-    private int id; // ~19 digit unique id
+    private int id; // ~19 digit unique user id
     private String gender; // male or female
     private String age; // <25, 25-34, 35-44, 45-54, >54
     private String income; // high, medium or low
     private String context; // blog, new, shopping, social media
-    private int impressionCost; // 6 d.p. value (>0)
+    private double impressionCost; // 6 d.p. value (>0)
 
-    public Impression(String date, int id, String gender, String age, String income, String context, int impressionCost) {
+    public Impression(String date, int id, String gender, String age, String income, String context, double impressionCost) {
         this.date = date;
         this.id = id;
         this.gender = gender;
@@ -67,7 +67,7 @@ public class Impression {
         this.context = context;
     }
 
-    public int getImpressionCost() {
+    public double getImpressionCost() {
         return impressionCost;
     }
 

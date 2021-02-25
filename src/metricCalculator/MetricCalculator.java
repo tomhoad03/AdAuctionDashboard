@@ -1,6 +1,6 @@
 package metricCalculator;
 
-import Logs.Reader;
+import Models.Reader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
