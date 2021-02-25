@@ -1,57 +1,61 @@
 package Models;
 
 public class Server {
-    private String entryDate; // entry date and time
-    private long id; // ~19 digit unique user id
-    private String exitDate; // exit date and time
-    private int pagesViewed; // num of pages viewed
-    private Boolean conversation; // has the user acted after clicking?
+    private int bounceNo; // number of bounces
+    private int conversionNo; // number of conversions
 
-    public Server(String entryDate, long id, String exitDate, int pagesViewed, Boolean conversation) {
-        this.entryDate = entryDate;
-        this.id = id;
-        this.exitDate = exitDate;
-        this.pagesViewed = pagesViewed;
-        this.conversation = conversation;
+    private final String serverFile;
+    private int pageLimit = 1;
+
+    public Server(String serverLog) {
+        serverFile = serverLog;
+        readServerLog();
     }
 
-    public String getEntryDate() {
-        return entryDate;
+    public void readServerLog(/*filtering to be added*/) {
+        Reader serverReader = new Reader(serverFile);
+        serverReader.getLine(); // Ignores the first line
+
+        // Reading the file
+        while (serverReader.fileIsReady()){
+            String[] log = serverReader.getLine().split(",");
+
+            // Extracting a server log's data
+            String entryDate = log[0]; // entry date and time
+            long id = Long.parseLong(log[1]); // ~19 digit unique user id
+            String exitDate = log[2]; // exit date and time
+            int pages = Integer.parseInt(log[3]); // num of pages viewed
+            boolean conversion = log[4].equalsIgnoreCase("Yes"); // has the user acted after clicking?
+
+            // calculating bounce number and conversion number
+            if (pages <= pageLimit && !conversion) {
+                bounceNo++;
+            }
+            if (conversion) {
+                conversionNo++;
+            }
+        }
     }
 
-    public void setEntryDate(String entryDate) {
-        this.entryDate = entryDate;
+    // Calculates difference between time (in form of string)
+    public int timeDifference(String entryDate, String exitDate){
+
+        String entryTime = exitDate.split(" ")[1];
+
+
+        String exitTime = exitDate.split(" ")[1];
+        return 0;
     }
 
-    public long getId() {
-        return id;
+    public void setPageLimit(int pageLimit) {
+        this.pageLimit = pageLimit;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getBounceNo() {
+        return bounceNo;
     }
 
-    public String getExitDate() {
-        return exitDate;
-    }
-
-    public void setExitDate(String exitDate) {
-        this.exitDate = exitDate;
-    }
-
-    public int getPagesViewed() {
-        return pagesViewed;
-    }
-
-    public void setPagesViewed(int pagesViewed) {
-        this.pagesViewed = pagesViewed;
-    }
-
-    public Boolean getConversation() {
-        return conversation;
-    }
-
-    public void setConversation(Boolean conversation) {
-        this.conversation = conversation;
+    public int getConversionNo() {
+        return conversionNo;
     }
 }

@@ -25,7 +25,7 @@ public class MetricCalculator {
     // OOP for logs
     private Impressions impressions;
     private Clicks clicks;
-    private Servers servers;
+    private Server server;
 
     public MetricCalculator() {
         // Files
@@ -36,13 +36,13 @@ public class MetricCalculator {
         // Classes for files
         this.impressions = new Impressions(impressionLog);
         this.clicks = new Clicks(clickLog);
-        this.servers = new Servers(serverLog);
+        this.server = new Server(serverLog);
 
         this.impressionsNo = impressions.getImpressionNo();
         this.uniquesNo = impressions.getUniquesNo();
         this.clicksNo = clicks.getClickNo();
-        this.bounceNo = 0;
-        this.conversionsNo = servers.getConversionNo();
+        this.bounceNo = server.getBounceNo();
+        this.conversionsNo = server.getConversionNo();
         this.totalImpressionCost = impressions.getTotalCost();
         this.totalClickCost = clicks.getTotalCost();
     }
@@ -57,16 +57,17 @@ public class MetricCalculator {
         double cpm = (calculator.totalImpressionCost * 1000) / calculator.impressionsNo;
         double br = (float) calculator.bounceNo / (float) calculator.clicksNo;
 
-        System.out.println("Number of impressions: "+Integer.toString(calculator.impressionsNo));
-        System.out.println("Number of clicks: "+Integer.toString(calculator.clicksNo));
-        System.out.println("Number of uniques: "+Integer.toString(calculator.uniquesNo));
-        System.out.println("Number of bounces: "+Integer.toString(calculator.bounceNo));
-        System.out.println("Number of conversions: "+Integer.toString(calculator.conversionsNo));
-        System.out.println("Total cost: "+Double.toString(calculator.totalImpressionCost));
-        System.out.println("CTR: "+ ctr); // Don't know why its giving 0?
-        System.out.println("CPA: "+ Double.toString(cpa));
-        System.out.println("CPC: " + Double.toString(cpc));
-        System.out.println("CPM: " + Double.toString(cpm));
-        System.out.println("Bounce Rate: "+ Double.toString(br));
+        // Printing of metrics
+        System.out.println("Number of impressions: " + calculator.impressionsNo);
+        System.out.println("Number of clicks: " + calculator.clicksNo);
+        System.out.println("Number of uniques: " + calculator.uniquesNo);
+        System.out.println("Number of bounces: " + calculator.bounceNo);
+        System.out.println("Number of conversions: " + calculator.conversionsNo);
+        System.out.println("Total cost: " + calculator.totalImpressionCost);
+        System.out.println("CTR: " + ctr);
+        System.out.println("CPA: " + cpa);
+        System.out.println("CPC: " + cpc);
+        System.out.println("CPM: " + cpm);
+        System.out.println("Bounce Rate: " + br);
     }
 }

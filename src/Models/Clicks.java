@@ -6,46 +6,31 @@ public class Clicks {
     private int clickNo; // number of clicks
     private double totalCost; // total cost of clicks
 
-    private ArrayList<Click> clicks = new ArrayList<>();
+    private final String clickFile;
 
     public Clicks(String clickLog) {
-        // Reads the csv
-        Reader clickReader = new Reader(clickLog);
-        clickReader.getLine(); // removing first line
+        clickFile = clickLog;
+        readClickLog();
+    }
 
-        // Reading line-by-line
+    public void readClickLog(/*filtering to be added*/) {
+        Reader clickReader = new Reader(clickFile);
+        clickReader.getLine(); // Ignores the first line
+
+        // Reading the file
         while (clickReader.fileIsReady()){
             String[] log = clickReader.getLine().split(",");
 
-            // counting total clicks
+            // Extracting a click log's data
+            String date = log[0]; // date and time
+            long id = Long.parseLong(log[1]); // ~19 digit unique user id
+            double clickCost = Double.parseDouble(log[2]); // 6 d.p. value (>0)
+
+            // calculating total clicks and total cost
             clickNo++;
-
-            // converting to appropriate type
-            long id = Long.parseLong(log[1]);
-
-            // adding cost of impression to totalCost
-            double clickCost = Double.parseDouble(log[2]);
             totalCost += clickCost;
-
-            // creates new impression
-            Click click = new Click(log[0], // date
-                                     id, // user id
-                                     clickCost); // click cost
-            clicks.add(click);
         }
     }
-
-    /*
-    // Calculates difference between time (in form of string)
-    public int timeDifference(String entryDate, String exitDate){
-
-        String entryTime = exitDate.split(" ")[1];
-
-
-        String exitTime = exitDate.split(" ")[1];
-        return 0;
-    }
-    */
 
     public int getClickNo() {
         return clickNo;
@@ -53,9 +38,5 @@ public class Clicks {
 
     public double getTotalCost() {
         return totalCost;
-    }
-
-    public ArrayList<Click> getClicks() {
-        return clicks;
     }
 }

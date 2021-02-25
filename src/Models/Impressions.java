@@ -1,49 +1,46 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Impressions {
     private int impressionNo; // total impressions
     private int uniquesNo; // total uniques
     private double totalCost; // total impression cost
 
-    private ArrayList<Impression> impressions = new ArrayList<>();
+    private final String impressionFile;
 
     public Impressions(String impressionLog) {
-        // Reads the csv
-        Reader impressionReader = new Reader(impressionLog);
-        impressionReader.getLine(); // removing first line
+        impressionFile = impressionLog;
+        readImpressionLog();
+    }
 
-        ArrayList<Long> uniqueIds = new ArrayList<>();
-        int count;
+    public void readImpressionLog(/*filtering to be added*/) {
+        Reader impressionReader = new Reader(impressionFile);
+        impressionReader.getLine(); // Ignores the first line
 
-        // Reading line-by-line
+        HashSet<Long> uniqueIds = new HashSet<>();
+
+        // Reading the file
         while (impressionReader.fileIsReady()){
             String[] log = impressionReader.getLine().split(",");
 
-            // counting total impressions
-            impressionNo++;
+            String date = log[0]; // date and time
+            long id = Long.parseLong(log[1]); // ~19 digit unique user id
+            String gender = log[2]; // male or female
+            String age = log[3]; // <25, 25-34, 35-44, 45-54, >54
+            String income = log[4]; // high, medium or low
+            String context = log[5]; // blog, new, shopping, social media
+            double impressionCost = Double.parseDouble(log[6]); // 6 d.p. value (>0)
 
-            // counting unique impressions
-            long id = Long.parseLong(log[1]);
+            // calculating total impressions, total cost and unique impressions
+            impressionNo++;
+            totalCost += impressionCost;
+
             if (!uniqueIds.contains(id)) {
                 uniquesNo++;
                 uniqueIds.add(id);
             }
-
-            // adding cost of impression to totalCost
-            double impressionCost = Double.parseDouble(log[6]);
-            totalCost += impressionCost;
-
-            // creates new impression
-            Impression impression = new Impression(log[0], // date
-                                                    id, // user id
-                                                    log[2], // gender
-                                                    log[3], // age
-                                                    log[4], // income
-                                                    log[5], // context
-                                                    impressionCost); // impression cost
-            impressions.add(impression);
         }
     }
 
@@ -57,9 +54,5 @@ public class Impressions {
 
     public double getTotalCost() {
         return totalCost;
-    }
-
-    public ArrayList<Impression> getImpressions() {
-        return impressions;
     }
 }
