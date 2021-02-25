@@ -1,9 +1,6 @@
-package metricCalculator;
+package Logs;
 
 import java.io.*;
-import java.util.*;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class Reader {
 
@@ -21,8 +18,6 @@ public class Reader {
     Bounce rate
     */
 
-
-
     public Reader(String fileName) {
         configuration = new File(fileName);
         this.fileName = fileName;
@@ -35,17 +30,11 @@ public class Reader {
 
     File configuration;
     BufferedReader reader;
-    String thisLine = null;
     String fileName;
-
-
-
-
 
     public String getLine() {
         try {
-            String line = reader.readLine();
-            return line;
+            return reader.readLine();
         } catch (IOException e) {
             return null;
         }
@@ -56,13 +45,10 @@ public class Reader {
 
             if (configuration == null || reader == null) {
                 return false;
-            } else if (configuration != null && reader.ready()) {
-                return true;
-            } else return false;
+            } else return reader.ready();
         } catch (IOException e) {
             return false;
         }
     }
-
 }
 
