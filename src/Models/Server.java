@@ -15,16 +15,12 @@ public class Server {
     private int bounceTime; // // bounce time
 
     // Initial metric calculation
-    public Server(String serverLog, int pageLimit, int bounceTime) {
+    public Server(String serverLog, int pageLimit, int bounceTime) throws ParseException {
         this.serverFile = serverLog;
         this.pageLimit = pageLimit;
         this.bounceTime = bounceTime;
 
-        try {
-            readServerLog();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        readServerLog();
     }
 
     public void readServerLog(/*filtering to be added*/) throws ParseException {
