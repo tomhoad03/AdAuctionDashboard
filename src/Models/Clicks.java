@@ -34,7 +34,7 @@ public class Clicks {
             // Extracting a click log's data
             Date date = parseDate(log[0]); // date and time
 
-            // Checks if the log fits within the given time scale
+            // Checks if the click log fits within the given time scale
             if (date.after(startDate) && date.before(endDate)) {
                 long id = Long.parseLong(log[1]); // ~19 digit unique user id
                 double clickCost = Double.parseDouble(log[2]); // 6 d.p. value (>0)

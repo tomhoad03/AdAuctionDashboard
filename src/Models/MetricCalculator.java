@@ -68,7 +68,7 @@ public class MetricCalculator {
             // Reads the log files
             impressions = new Impressions(impressionLog, startDate, endDate);
             clicks = new Clicks(clickLog, startDate, endDate);
-            server = new Server(serverLog, pageLimit, bounceTime);
+            server = new Server(serverLog, pageLimit, bounceTime, startDate, endDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
