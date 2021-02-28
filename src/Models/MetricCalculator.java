@@ -45,9 +45,8 @@ public class MetricCalculator {
     public void calculateMetrics(int pageLimit, int bounceTime, String start, String end) {
         try {
             // converts string to date - temporary till inputs
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date startDate = sdf.parse(start);
-            Date endDate = sdf.parse(end);
+            Date startDate = parseDate(start);
+            Date endDate = parseDate(end);
 
             // calculating metrics from the three separate logs
             calculateImpressionsMetrics(startDate, endDate);
@@ -65,6 +64,29 @@ public class MetricCalculator {
         br = (double) bounceNo / (double) clicksNo;
     }
 
+    // converts string to date, catches n/a end dates
+    public Date parseDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        if (date.equals("n/a")) {
+            return null;
+        } else {
+            return (sdf.parse(date));
+        }
+    }
+
+    public boolean inTime(Date logDate, Date filterStart, Date filterEnd) {
+        if (filterStart == null && filterEnd == null) {
+            return true;
+        } else if (filterStart != null && filterEnd == null){
+            return logDate.after(filterStart);
+        } else if (filterStart == null) {
+            return logDate.before(filterEnd);
+        } else {
+            return logDate.after(filterStart) && logDate.before(filterEnd);
+        }
+    }
+
     // calculates metrics from impressions
     public void calculateImpressionsMetrics(Date startDate, Date endDate /*more filtering to be added*/) {
         ArrayList<Impression> impressionsList = impressions.getImpressions(); // list of impressions
@@ -77,11 +99,11 @@ public class MetricCalculator {
         totalImpressionCost = 0;
         uniquesNo = 0;
 
-        while (inTime) {
+        while (inTime && count < impressionsList.size()) {
             Impression impression = impressionsList.get(count);
 
             // checks if the impression log fits within the given time scale
-            if (impression.date.after(startDate) && impression.date.before(endDate)) {
+            if (inTime(impression.date, startDate, endDate)) {
                 // calculating total impressions, total cost and unique impressions
                 impressionsNo++;
                 totalImpressionCost += impression.impressionCost;
@@ -108,11 +130,11 @@ public class MetricCalculator {
         clicksNo = 0;
         totalClickCost = 0;
 
-        while (inTime) {
+        while (inTime && count < clicksList.size()) {
             Click click = clicksList.get(count);
 
             // checks if the click log fits within the given time scale
-            if (click.date.after(startDate) && click.date.before(endDate)) {
+            if (inTime(click.date, startDate, endDate)) {
                 // calculating total clicks and total cost
                 clicksNo++;
                 totalClickCost += click.clickCost;
@@ -133,11 +155,11 @@ public class MetricCalculator {
         bounceNo = 0;
         conversionsNo = 0;
 
-        while (inTime) {
+        while (inTime && count < serversList.size()) {
             Server server = serversList.get(count);
 
             // checks if the server log fits within the given time scale
-            if (server.entryDate.after(startDate) && server.entryDate.before(endDate)) {
+            if (inTime(server.entryDate, startDate, endDate)) {
                 // calculating bounce number and conversion number
                 if (server.pages <= pageLimit || splitDates(bounceTime, server.entryDate, server.exitDate) <= bounceTime) {
                     bounceNo++;
@@ -177,14 +199,5 @@ public class MetricCalculator {
         System.out.println("CPC: " + cpc);
         System.out.println("CPM: " + cpm);
         System.out.println("Bounce Rate: " + br);
-    }
-
-    // main
-    public static void main(String[] args){
-        MetricCalculator calculator = new MetricCalculator();
-
-        // filtering variables - temporary till input
-        calculator.calculateMetrics(2, 200, "2015-01-01 12:01:21", "2015-01-01 13:51:59");
-        calculator.print();
     }
 }
