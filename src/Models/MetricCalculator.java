@@ -7,73 +7,57 @@ import java.util.Date;
 import java.util.HashSet;
 
 public class MetricCalculator {
-    // Already calculated
-    private int impressionsNo; // number of impressions
-    private int uniquesNo; // number of unique impressions
-    private int clicksNo; // number of clicks
-    private int bounceNo; // number of bounces
-    private int conversionsNo; // number of conversions
-    private double totalImpressionCost; // total impression cost
-    private double totalClickCost; // total click cost
+    private int impressionsNo; // number of impressions - people who saw the ad
+    private int uniquesNo; // number of unique impressions - unique people who saw the ad
+    private int clicksNo; // number of clicks - people who clicked the ad
+    private int bounceNo; // number of bounces - people who clicked away after a while
+    private int conversionsNo; // number of conversions - people who click then acts on ad
+    private double totalImpressionCost; // total impression cost - cost of impressions
+    private double totalClickCost; // total click cost - cost of clicks
 
-    // To be calculated
-    private double ctr; // number of clicks / number of impressions
-    private double cpa; // total impressions cost / number of conversions
-    private double cpc; // total impression cost / number of clicks
-    private double cpm; // (total impressions cost * 1000) / number of impressions
-    private double br; // number of bounces / number of clicks
-
-    /**
-     Number of impressions: people who saw the ad
-     Number of clicks: people who clicked the ad
-     Number of uniques: unique people who saw the ad
-     Number of Bounces: number of people who clicked away after a while
-     Number of Conversions: clicks then acts on ad
-     Total Impressions Cost: cost of impressions
-     Total Click Cost: cost of clicks
-     CTR: Click through rate, clicks per impression
-     CPA: Cost per acquisition
-     CPC: Cost per click
-     CPM: Cost per thousand impressions
-     Bounce rate
-     */
+    private double ctr; // click-through-rate - clicks per impression
+    private double cpa; // cost-per-acquisition
+    private double cpc; // cost-per-click
+    private double cpm; // cost-per-thousand impressions
+    private double br; // bounce rate - number of bounces per click
 
     private Impressions impressions;
     private Clicks clicks;
     private Servers servers;
 
-    private final String impressionLog;
-    private final String clickLog;
-    private final String serverLog;
-
     public MetricCalculator() {
-        // File names
-        this.impressionLog = "src/Logs/impression_log.csv";
-        this.clickLog = "src/Logs/click_log.csv";
-        this.serverLog = "src/Logs/server_log.csv";
+        // file names - temporary till inputs
+        String impressionLog = "src/Logs/impression_log.csv";
+        String clickLog = "src/Logs/click_log.csv";
+        String serverLog = "src/Logs/server_log.csv";
+
+        // reads the log files
+        try {
+            this.impressions = new Impressions(impressionLog);
+            this.clicks = new Clicks(clickLog);
+            this.servers = new Servers(serverLog);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     // calculates metrics
     public void calculateMetrics(int pageLimit, int bounceTime, String start, String end) {
-        // cate filtering
         try {
-            Date endDate = parseDate(end);
-            Date startDate = parseDate(start);
+            // converts string to date - temporary till inputs
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date startDate = sdf.parse(start);
+            Date endDate = sdf.parse(end);
 
-            // Reads the log files
-            impressions = new Impressions(impressionLog);
+            // calculating metrics from the three separate logs
             calculateImpressionsMetrics(startDate, endDate);
-
-            clicks = new Clicks(clickLog);
             calculateClicksMetrics(startDate, endDate);
-
-            servers = new Servers(serverLog);
             calculateServersMetrics(pageLimit, bounceTime, startDate, endDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Additional metrics calculated from previous metrics
+        // additional metrics calculated from previous metrics
         ctr = (double) clicksNo / (double) impressionsNo;
         cpa = totalImpressionCost / conversionsNo;
         cpc = totalImpressionCost / clicksNo;
@@ -81,20 +65,14 @@ public class MetricCalculator {
         br = (double) bounceNo / (double) clicksNo;
     }
 
-    // Converts string to date
-    public Date parseDate(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        return (sdf.parse(date));
-    }
-
     // calculates metrics from impressions
-    public void calculateImpressionsMetrics(Date startDate, Date endDate /*filtering to be added*/) {
+    public void calculateImpressionsMetrics(Date startDate, Date endDate /*more filtering to be added*/) {
         ArrayList<Impression> impressionsList = impressions.getImpressions(); // list of impressions
         HashSet<Long> uniqueIds = new HashSet<>(); // list of unique users
         boolean inTime = true; // date filtering
         int count = 0; // indexing
 
-        // resets the impression metrics
+        // resets the impressions metrics
         impressionsNo = 0;
         totalImpressionCost = 0;
         uniquesNo = 0;
@@ -121,15 +99,19 @@ public class MetricCalculator {
     }
 
     // calculates metrics from clicks
-    public void calculateClicksMetrics(Date startDate, Date endDate /*filtering to be added*/) {
+    public void calculateClicksMetrics(Date startDate, Date endDate /*more filtering to be added*/) {
         ArrayList<Click> clicksList = clicks.getClicks(); // list of clicks
         boolean inTime = true; // date filtering
         int count = 0; // indexing
 
+        // resets the clicks metrics
+        clicksNo = 0;
+        totalClickCost = 0;
+
         while (inTime) {
             Click click = clicksList.get(count);
 
-            // Checks if the click log fits within the given time scale
+            // checks if the click log fits within the given time scale
             if (click.date.after(startDate) && click.date.before(endDate)) {
                 // calculating total clicks and total cost
                 clicksNo++;
@@ -142,15 +124,19 @@ public class MetricCalculator {
         }
     }
 
-    public void calculateServersMetrics(int pageLimit, int bounceTime, Date startDate, Date endDate /*filtering to be added*/) {
+    public void calculateServersMetrics(int pageLimit, int bounceTime, Date startDate, Date endDate /*more filtering to be added*/) {
         ArrayList<Server> serversList = servers.getServers(); // list of clicks
         boolean inTime = true; // date filtering
         int count = 0; // indexing
 
+        // resets the servers metrics
+        bounceNo = 0;
+        conversionsNo = 0;
+
         while (inTime) {
             Server server = serversList.get(count);
 
-            // Checks if the server log fits within the given time scale
+            // checks if the server log fits within the given time scale
             if (server.entryDate.after(startDate) && server.entryDate.before(endDate)) {
                 // calculating bounce number and conversion number
                 if (server.pages <= pageLimit || splitDates(bounceTime, server.entryDate, server.exitDate) <= bounceTime) {
@@ -167,7 +153,7 @@ public class MetricCalculator {
         }
     }
 
-    // Calculates difference between two dates given as strings
+    // calculates difference between two dates given as strings
     public long splitDates(int bounceTime, Date entryDate, Date exitDate) {
         if (exitDate == null) {
             return bounceTime - 1; // where the exit date is invalid, it's counted as a bounce
@@ -176,7 +162,7 @@ public class MetricCalculator {
         }
     }
 
-    // Temporary function to display metrics in terminal
+    // temporary function to display metrics in terminal
     public void print() {
         System.out.println("Number of impressions: " + impressionsNo);
         System.out.println("Number of uniques: " + uniquesNo);
@@ -185,6 +171,7 @@ public class MetricCalculator {
         System.out.println("Number of conversions: " + conversionsNo);
         System.out.println("Total impression cost: " + totalImpressionCost);
         System.out.println("Total click cost: " + totalClickCost);
+
         System.out.println("CTR: " + ctr);
         System.out.println("CPA: " + cpa);
         System.out.println("CPC: " + cpc);
@@ -196,7 +183,7 @@ public class MetricCalculator {
     public static void main(String[] args){
         MetricCalculator calculator = new MetricCalculator();
 
-        // starts taking start date as string
+        // filtering variables - temporary till input
         calculator.calculateMetrics(2, 200, "2015-01-01 12:01:21", "2015-01-01 13:51:59");
         calculator.print();
     }
