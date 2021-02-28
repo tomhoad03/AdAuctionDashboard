@@ -174,23 +174,6 @@ public class MetricCalculator {
         }
     }
 
-    // temporary function to display metrics in terminal
-    public void print() {
-        System.out.println("Number of impressions: " + impressionsNo);
-        System.out.println("Number of uniques: " + uniquesNo);
-        System.out.println("Number of clicks: " + clicksNo);
-        System.out.println("Number of bounces: " + bounceNo);
-        System.out.println("Number of conversions: " + conversionsNo);
-        System.out.println("Total impression cost: " + totalImpressionCost);
-        System.out.println("Total click cost: " + totalClickCost);
-
-        System.out.println("CTR: " + ctr);
-        System.out.println("CPA: " + cpa);
-        System.out.println("CPC: " + cpc);
-        System.out.println("CPM: " + cpm);
-        System.out.println("Bounce Rate: " + br);
-    }
-
     public int getImpressionsNo() {
         return impressionsNo;
     }
