@@ -25,20 +25,10 @@ public class MetricCalculator {
     private Clicks clicks;
     private Servers servers;
 
-    public MetricCalculator() {
-        // file names - temporary till inputs
-        String impressionLog = "src/Logs/impression_log.csv";
-        String clickLog = "src/Logs/click_log.csv";
-        String serverLog = "src/Logs/server_log.csv";
-
-        // reads the log files
-        try {
-            this.impressions = new Impressions(impressionLog);
-            this.clicks = new Clicks(clickLog);
-            this.servers = new Servers(serverLog);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public MetricCalculator(Impressions impressions, Clicks clicks, Servers servers) {
+        this.impressions = impressions;
+        this.clicks = clicks;
+        this.servers = servers;
     }
 
     // calculates metrics
@@ -199,5 +189,53 @@ public class MetricCalculator {
         System.out.println("CPC: " + cpc);
         System.out.println("CPM: " + cpm);
         System.out.println("Bounce Rate: " + br);
+    }
+
+    public int getImpressionsNo() {
+        return impressionsNo;
+    }
+
+    public int getUniquesNo() {
+        return uniquesNo;
+    }
+
+    public int getClicksNo() {
+        return clicksNo;
+    }
+
+    public int getBounceNo() {
+        return bounceNo;
+    }
+
+    public int getConversionsNo() {
+        return conversionsNo;
+    }
+
+    public double getTotalImpressionCost() {
+        return totalImpressionCost;
+    }
+
+    public double getTotalClickCost() {
+        return totalClickCost;
+    }
+
+    public double getCtr() {
+        return ctr;
+    }
+
+    public double getCpa() {
+        return cpa;
+    }
+
+    public double getCpc() {
+        return cpc;
+    }
+
+    public double getCpm() {
+        return cpm;
+    }
+
+    public double getBr() {
+        return br;
     }
 }
