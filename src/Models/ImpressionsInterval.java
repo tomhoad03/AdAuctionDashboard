@@ -11,4 +11,8 @@ public class ImpressionsInterval extends Interval {
 
         this.impressions = impressions;
     }
+
+    public ArrayList<Impression> getImpressions() {
+        return impressions;
+    }
 }

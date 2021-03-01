@@ -11,4 +11,8 @@ public class ClicksInterval extends Interval {
 
         this.clicks = clicks;
     }
+
+    public ArrayList<Click> getClicks() {
+        return clicks;
+    }
 }

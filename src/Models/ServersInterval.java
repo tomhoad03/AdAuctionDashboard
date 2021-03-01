@@ -11,4 +11,8 @@ public class ServersInterval extends Interval {
 
         this.servers = servers;
     }
+
+    public ArrayList<Server> getServers() {
+        return servers;
+    }
 }
