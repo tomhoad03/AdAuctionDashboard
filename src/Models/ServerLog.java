@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ServerLog {
+public class ServerLog extends Log {
     private ArrayList<Server> serverList = new ArrayList<>(); // list of logs
-    private final LocalDateTime firstDate; // date of first log
-    private final LocalDateTime lastDate; // date of last log
 
     public ServerLog(String serverFile) {
         Reader serverReader = new Reader(serverFile); // file reader
@@ -28,15 +26,16 @@ public class ServerLog {
         }
 
         // determines the dates of the logs
-        this.firstDate = serverList.get(0).entryDate;
-        this.lastDate = serverList.get(serverList.size() - 1).entryDate;
+        setFirstDate(serverList.get(0).entryDate);
+        setLastDate(serverList.get(serverList.size() - 1).entryDate);
     }
 
     // constructor for an existing list of server logs
     public ServerLog(ArrayList<Server> serversList) {
         this.serverList = serversList; // list of server logs
-        this.firstDate = serversList.get(0).entryDate; // start date
-        this.lastDate = serversList.get(serversList.size() - 1).entryDate; // end date
+
+        setFirstDate(serversList.get(0).entryDate); // start date
+        setLastDate(serversList.get(serversList.size() - 1).entryDate); // end date
     }
 
     // converts string to date, catches n/a end dates
@@ -51,13 +50,5 @@ public class ServerLog {
 
     public ArrayList<Server> getServerList() {
         return serverList;
-    }
-
-    public LocalDateTime getFirstDate() {
-        return firstDate;
-    }
-
-    public LocalDateTime getLastDate() {
-        return lastDate;
     }
 }

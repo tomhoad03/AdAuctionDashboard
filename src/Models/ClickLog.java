@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ClickLog {
+public class ClickLog extends Log {
     private ArrayList<Click> clicksList = new ArrayList<>(); // list of logs
-    private final LocalDateTime firstDate; // date of first log
-    private final LocalDateTime lastDate; // date of last log
 
     // constructor for the first time opening a campaign
     public ClickLog(String clickFile) {
@@ -27,15 +25,15 @@ public class ClickLog {
         }
 
         // determines the dates of the logs
-        this.firstDate = clicksList.get(0).date;
-        this.lastDate = clicksList.get(clicksList.size() - 1).date;
+        setFirstDate(clicksList.get(0).date);
+        setLastDate(clicksList.get(clicksList.size() - 1).date);
     }
 
     // constructor for an exisiting list of clicks
     public ClickLog(ArrayList<Click> clicksList) {
         this.clicksList = clicksList; // list of impressions
-        this.firstDate = clicksList.get(0).date; // start date
-        this.lastDate = clicksList.get(clicksList.size() - 1).date; // end date
+        setFirstDate(clicksList.get(0).date); // start date
+        setLastDate(clicksList.get(clicksList.size() - 1).date); // end date
     }
 
     // converts string to date,
@@ -46,13 +44,5 @@ public class ClickLog {
 
     public ArrayList<Click> getClicksList() {
         return clicksList;
-    }
-
-    public LocalDateTime getFirstDate() {
-        return firstDate;
-    }
-
-    public LocalDateTime getLastDate() {
-        return lastDate;
     }
 }

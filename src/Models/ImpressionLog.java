@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ImpressionLog {
+public class ImpressionLog extends Log {
     private ArrayList<Impression> impressionsList = new ArrayList<>(); // list of logs
-    private final LocalDateTime firstDate; // date of first log
-    private final LocalDateTime lastDate; // date of last log
 
     // constructor for the first time opening a campaign
     public ImpressionLog(String impressionFile) {
@@ -30,15 +28,16 @@ public class ImpressionLog {
             impressionsList.add(impression);
         }
 
-        this.firstDate = impressionsList.get(0).date;
-        this.lastDate = impressionsList.get(impressionsList.size() - 1).date;
+        // determines the dates of the logs
+        setFirstDate(impressionsList.get(0).date);
+        setLastDate(impressionsList.get(impressionsList.size() - 1).date);
     }
 
     // constructor for an exisiting list of impressions
     public ImpressionLog(ArrayList<Impression> impressionsList) {
         this.impressionsList = impressionsList; // list of impressions
-        this.firstDate = impressionsList.get(0).date; // start date
-        this.lastDate = impressionsList.get(impressionsList.size() - 1).date; // end date
+        setFirstDate(impressionsList.get(0).date); // start date
+        setLastDate(impressionsList.get(impressionsList.size() - 1).date); // end date
     }
 
     // converts string to date
@@ -49,13 +48,5 @@ public class ImpressionLog {
 
     public ArrayList<Impression> getImpressionsList() {
         return impressionsList;
-    }
-
-    public LocalDateTime getFirstDate() {
-        return firstDate;
-    }
-
-    public LocalDateTime getLastDate() {
-        return lastDate;
     }
 }
