@@ -24,7 +24,9 @@ public class Main {
         **/
 
         ChartCalculator calculator2 = campaign.newChartCalculator();
-        calculator2.createDates();
+        calculator2.createImpressionsDates();
+        calculator2.createClicksDates();
+        calculator2.createServersDates();
     }
 
     // temporary function to display metrics in terminal

@@ -21,20 +21,32 @@ public class ChartCalculator {
         this.servers = servers;
     }
 
+    public void createImpressionsDates() {
+         createDates(impressions.getStartDate(), impressions.getEndDate());
+    }
+
+    public void createClicksDates() {
+        createDates(clicks.getStartDate(), clicks.getEndDate());
+    }
+
+    public void createServersDates() {
+        createDates(servers.getStartDate(), clicks.getEndDate());
+    }
+
     // creates a list of dates separated by a constant interval
-    public void createDates() {
+    public void createDates(LocalDateTime startDate, LocalDateTime endDate) {
         ArrayList<LocalDateTime> dates = new ArrayList<>();
-        dates.add(LocalDateTime.now());
+        dates.add(startDate);
 
         // calculates time difference
-        long weeks = ChronoUnit.WEEKS.between(LocalDateTime.now(), LocalDateTime.now().plusYears(1));
+        long hours = ChronoUnit.HOURS.between(startDate, endDate);
 
         // gets dates at every interval
-        for (long i=1; i<weeks; i++) {
-            dates.add(LocalDateTime.now().plusWeeks(i));
+        for (long i=1; i<=hours+1; i++) {
+            dates.add(startDate.plusHours(i));
         }
 
-        System.out.println(dates);
-        System.out.println(dates.size());
+        System.out.println(dates); // list of intervals
+        System.out.println(dates.size()); // number of intervals
     }
 }
