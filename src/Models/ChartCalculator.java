@@ -1,28 +1,13 @@
 package Models;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class ChartCalculator {
-    private int[] impressionsNo; // number of impressions - people who saw the ad
-    private int[] uniquesNo; // number of unique impressions - unique people who saw the ad
-    private int[] clicksNo; // number of clicks - people who clicked the ad
-    private int[] bounceNo; // number of bounces - people who clicked away after a while
-    private int[] conversionsNo; // number of conversions - people who click then acts on ad
-    private double[] totalImpressionCost; // total impression cost - cost of impressions
-    private double[] totalClickCost; // total click cost - cost of clicks
-
-    private double[] ctr; // click-through-rate - clicks per impression
-    private double[] cpa; // cost-per-acquisition
-    private double[] cpc; // cost-per-click
-    private double[] cpm; // cost-per-thousand impressions
-    private double[] br; // bounce rate - number of bounces per click
-
-    private Impressions impressions;
-    private Clicks clicks;
-    private Servers servers;
+    private final Impressions impressions;
+    private final Clicks clicks;
+    private final Servers servers;
 
     /**
     my next approach will be to try results in multiple groups depending on time granularity
@@ -36,10 +21,20 @@ public class ChartCalculator {
         this.servers = servers;
     }
 
+    // creates a list of dates separated by a constant interval
     public void createDates() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        ArrayList<LocalDateTime> dates = new ArrayList<>();
+        dates.add(LocalDateTime.now());
 
-        Date startDate = new Date();
-        System.out.println(sdf.format(startDate));
+        // calculates time difference
+        long weeks = ChronoUnit.WEEKS.between(LocalDateTime.now(), LocalDateTime.now().plusYears(1));
+
+        // gets dates at every interval
+        for (long i=1; i<weeks; i++) {
+            dates.add(LocalDateTime.now().plusWeeks(i));
+        }
+
+        System.out.println(dates);
+        System.out.println(dates.size());
     }
 }

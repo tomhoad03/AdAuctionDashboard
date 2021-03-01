@@ -7,25 +7,24 @@ public class Main {
         Campaign campaign = new Campaign("src/Logs/impression_log.csv", "src/Logs/click_log.csv", "src/Logs/server_log.csv"); // string inputs temporary
 
         MetricCalculator calculator1 = campaign.newMetricCalculator();
-        MetricCalculator calculator2 = campaign.newMetricCalculator();
 
-        calculator1.calculateMetrics(1, 500);
+        calculator1.calculateMetrics();
         print(calculator1);
 
         System.out.println(" ");
-
-        calculator2.calculateMetrics(2, 250);
-        print(calculator2);
 
         /**
         a new calculator should be created for each chart, graph or histogram we need
         the print functions are to be replaced with far more variety
         atm you can print all, or get each metric individually (OOP getters)
         atm we can only show them in a terminal but in future this will be changed to produce outputs that can be used in charts and histograms
+
+        i also want to go back to storing the records as a map of the id to the details
+        i changed this so it was easier to make classes and i think it could now improve the performance a bit
         **/
 
-        ChartCalculator calculator3 = campaign.newChartCalculator();
-        calculator3.createDates();
+        ChartCalculator calculator2 = campaign.newChartCalculator();
+        calculator2.createDates();
     }
 
     // temporary function to display metrics in terminal

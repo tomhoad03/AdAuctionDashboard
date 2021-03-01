@@ -20,6 +20,9 @@ public class MetricCalculator {
     private double cpm; // cost-per-thousand impressions
     private double br; // bounce rate - number of bounces per click
 
+    private final int pageLimit; // max number of pages to be counted as a bounce
+    private final int bounceTime; // max amount of time to be counted as a bounce
+
     private final Impressions impressions;
     private final Clicks clicks;
     private final Servers servers;
@@ -28,10 +31,13 @@ public class MetricCalculator {
         this.impressions = impressions;
         this.clicks = clicks;
         this.servers = servers;
+
+        this.pageLimit = 1;
+        this.bounceTime = 500;
     }
 
     // calculates metrics
-    public void calculateMetrics(int pageLimit, int bounceTime) {
+    public void calculateMetrics() {
         // calculating metrics from the three separate logs
         calculateImpressionsMetrics();
         calculateClicksMetrics();
@@ -104,7 +110,7 @@ public class MetricCalculator {
             Server server = serversList.get(count);
 
             // calculating bounce number and conversion number
-            if (server.pages <= pageLimit || splitDates(bounceTime, server.entryDate, server.exitDate) <= bounceTime) {
+            if (server.pages <= pageLimit || timeDifference(bounceTime, server.entryDate, server.exitDate) <= bounceTime) {
                 bounceNo++;
             }
             if (server.conversion) {
@@ -115,7 +121,7 @@ public class MetricCalculator {
     }
 
     // calculates difference between two dates given as strings
-    public long splitDates(int bounceTime, LocalDateTime entryDate, LocalDateTime exitDate) {
+    public long timeDifference(int bounceTime, LocalDateTime entryDate, LocalDateTime exitDate) {
         if (exitDate == null) {
             return bounceTime - 1; // where the exit date is invalid, it's counted as a bounce
         } else {
