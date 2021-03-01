@@ -20,4 +20,32 @@ public class Impression {
         this.context = context;
         this.impressionCost = impressionCost;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getIncome() {
+        return income;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public double getImpressionCost() {
+        return impressionCost;
+    }
 }

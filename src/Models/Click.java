@@ -12,4 +12,16 @@ public class Click {
         this.id = id;
         this.clickCost = clickCost;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public double getClickCost() {
+        return clickCost;
+    }
 }

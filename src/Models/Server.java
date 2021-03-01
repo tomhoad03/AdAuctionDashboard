@@ -16,4 +16,24 @@ public class Server {
         this.pages = pages;
         this.conversion = conversion;
     }
+
+    public LocalDateTime getEntryDate() {
+        return entryDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public LocalDateTime getExitDate() {
+        return exitDate;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public boolean isConversion() {
+        return conversion;
+    }
 }
