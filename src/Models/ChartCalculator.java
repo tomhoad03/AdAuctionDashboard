@@ -15,99 +15,100 @@ public class ChartCalculator extends Calculator {
     eg. (Jan-March, April-June, July-Sep, etc.)
     **/
 
-    // creates a list of dates separated by a constant interval
-    public ArrayList<LocalDateTime> createDates(LocalDateTime startDate, LocalDateTime endDate) {
+    // gets all the impressions data points sorted into the intervals produced
+    public ArrayList<MetricCalculator> createIntervals(LocalDateTime startDate, LocalDateTime endDate) {
+        // creates a list of dates separated by a constant interval
         ArrayList<LocalDateTime> dates = new ArrayList<>();
         dates.add(startDate);
 
-        // calculates time difference
-        long hours = ChronoUnit.HOURS.between(startDate, endDate);
+        // calculates time difference (temporarily in days)
+        long days = ChronoUnit.DAYS.between(startDate, endDate);
 
         // gets dates at every interval
-        for (long i=1; i<=hours+1; i++) {
-            dates.add(startDate.plusHours(i));
+        for (long i=1; i<=days+1; i++) {
+            dates.add(startDate.plusDays(i));
         }
 
-        return dates;
-    }
+        ArrayList<MetricCalculator> intervalCalculators = new ArrayList<>(); // list of calculators for log entries in each interval
+        ArrayList<ImpressionLog> intervalImpressionLogs = new ArrayList<>(); // list of impression logs in each interval
+        ArrayList<ClickLog> intervalClickLogs = new ArrayList<>(); // list of click logs in each interval
+        ArrayList<ServerLog> intervalServerLogs = new ArrayList<>(); // list of server logs in each interval
 
-    /**
-    // gets all the impressions data points sorted into the intervals produced
-    public Chart createImpressionsIntervals() {
-        ArrayList<LocalDateTime> dates = createDates(getImpressionLog().getFirstDate(), getImpressionLog().getLastDate());
+        // current interval logs
+        ImpressionLog currentImpressionLog = new ImpressionLog(new ArrayList<>());
+        ClickLog currentClickLog = new ClickLog(new ArrayList<>());
+        ServerLog currentServerLog = new ServerLog(new ArrayList<>());
 
-        Chart intervals = new Chart();
-        ArrayList<Impression> interval = new ArrayList<>();
-
-        LocalDateTime currentDate = dates.get(0);
-        LocalDateTime nextDate = dates.get(1);
+        LocalDateTime lastDate = dates.get(1); // last date of interval
         int count = 1;
 
+        // Creates a list of impression logs for each interval
         for (Impression impression : getImpressionLog().getImpressionsList()) {
-            if (!impression.date.isBefore(nextDate)) {
-                intervals.add(new ImpressionsInterval(currentDate, interval));
-                interval.clear();
+            if (!impression.date.isBefore(lastDate)) { // if its the first log in a new interval
+                // completes the current interval log
+                currentImpressionLog.setDates();
+                intervalImpressionLogs.add(currentImpressionLog);
+
+                // resets the current interval log
+                currentImpressionLog = new ImpressionLog(new ArrayList<>());
+                currentImpressionLog.getImpressionsList().add(impression);
 
                 count++;
-                currentDate = dates.get(count - 1);
-                nextDate = dates.get(count);
+                lastDate = dates.get(count);
             }
-            interval.add(impression);
+            currentImpressionLog.getImpressionsList().add(impression); // adds the log entry to the current interval log
         }
 
-        return intervals;
-    }
+        // resets the date
+        lastDate = dates.get(1); // last date of interval
+        count = 1;
 
-    // gets all the clicks data points sorted into the intervals produced
-    public ArrayList<ClicksInterval> createClicksIntervals() {
-        ArrayList<LocalDateTime> dates = createDates(getClicks().getStartDate(), getClicks().getEndDate());
+        // Creates a list of click logs for each interval
+        for (Click click : getClickLog().getClicksList()) {
+            if (!click.date.isBefore(lastDate)) { // if its the first log in a new interval
+                // completes the current interval log
+                currentClickLog.setDates();
+                intervalClickLogs.add(currentClickLog);
 
-        ArrayList<ClicksInterval> intervals = new ArrayList<>();
-        ArrayList<Click> interval = new ArrayList<>();
-
-        LocalDateTime currentDate = dates.get(0);
-        LocalDateTime nextDate = dates.get(1);
-        int count = 1;
-
-        for (Click click : getClicks().getClicks()) {
-            if (!click.date.isBefore(nextDate)) {
-                intervals.add(new ClicksInterval(currentDate, interval));
-                interval.clear();
+                // resets the current interval log
+                currentClickLog = new ClickLog(new ArrayList<>());
+                currentClickLog.getClicksList().add(click);
 
                 count++;
-                currentDate = dates.get(count - 1);
-                nextDate = dates.get(count);
+                lastDate = dates.get(count);
             }
-            interval.add(click);
+            currentClickLog.getClicksList().add(click); // adds the log entry to the current interval log
         }
 
-        return intervals;
-    }
+        // resets the date
+        lastDate = dates.get(1); // last date of interval
+        count = 1;
 
-    // gets all the servers data points sorted into the intervals produced
-    public ArrayList<ServersInterval> createServersIntervals() {
-        ArrayList<LocalDateTime> dates = createDates(getServers().getStartDate(), getServers().getEndDate());
+        // Creates a list of server logs for each interval
+        for (Server server : getServerLog().getServerList()) {
+            if (!server.entryDate.isBefore(lastDate)) { // if its the first log in a new interval
+                // completes the current interval log
+                currentServerLog.setDates();
+                intervalServerLogs.add(currentServerLog);
 
-        ArrayList<ServersInterval> intervals = new ArrayList<>();
-        ArrayList<Server> interval = new ArrayList<>();
-
-        LocalDateTime currentDate = dates.get(0);
-        LocalDateTime nextDate = dates.get(1);
-        int count = 1;
-
-        for (Server server : getServers().getServers()) {
-            if (!server.entryDate.isBefore(nextDate)) {
-                intervals.add(new ServersInterval(currentDate, interval));
-                interval.clear();
+                // resets the current interval log
+                currentServerLog = new ServerLog(new ArrayList<>());
+                currentServerLog.getServerList().add(server);
 
                 count++;
-                currentDate = dates.get(count - 1);
-                nextDate = dates.get(count);
+                lastDate = dates.get(count);
             }
-            interval.add(server);
+            currentServerLog.getServerList().add(server); // adds the log entry to the current interval log
         }
 
-        return intervals;
+        if (intervalImpressionLogs.size() == intervalClickLogs.size() && intervalImpressionLogs.size() == intervalServerLogs.size()) {
+            for (int i=0; i < intervalImpressionLogs.size(); i++) {
+                intervalCalculators.add(new MetricCalculator(intervalImpressionLogs.get(i), intervalClickLogs.get(i), intervalServerLogs.get(i)));
+            }
+        } else {
+            System.out.println("Error!");
+        }
+
+        return intervalCalculators;
     }
-     */
 }

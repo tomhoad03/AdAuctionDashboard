@@ -11,12 +11,10 @@ public class Main {
         calculator1.calculateMetrics();
         print(calculator1);
 
-        /*
         System.out.println(" ");
 
         ChartCalculator calculator2 = campaign.newChartCalculator();
-        System.out.println(calculator2.createDates(LocalDateTime.now(), LocalDateTime.now().plusYears(1)));
-         */
+        System.out.println(calculator2.createIntervals(calculator2.getImpressionLog().getFirstDate(), calculator2.getImpressionLog().getLastDate()));
 
         Chart chart = new Chart(
                 "Metrics vs Time" ,
