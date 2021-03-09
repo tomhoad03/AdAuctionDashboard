@@ -1,4 +1,5 @@
 import Models.*;
+import View.AdAuctionGUI;
 import View.Chart;
 import org.jfree.ui.RefineryUtilities;
 
@@ -42,7 +43,7 @@ public class Main {
          * improve & update commenting
          * merge any GUI stuff
          * find out from Yvonne how large the actual data set is - response pending
-         * change how the interval is handled - make subclasses of chart calculator for intervals - this might be pointless
+         * change how the interval is handled - make subclasses of chart calculator for intervals
          *
          * for later:
          * filtering was removed due to my bad implementation - leave till 2nd deliverable

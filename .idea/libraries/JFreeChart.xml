@@ -1,8 +1,8 @@
 <component name="libraryTable">
-  <library name="jfreechart-1.0.1">
+  <library name="JFreeChart">
     <CLASSES>
-      <root url="jar://C:/Program Files/Java/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar!/" />
       <root url="jar://C:/Program Files/Java/jfreechart-1.0.1/lib/jcommon-1.0.0.jar!/" />
+      <root url="jar://C:/Program Files/Java/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
