@@ -8,7 +8,6 @@
       <element id="module-output" name="AdAuctionDashboard" />
       <element id="extracted-dir" path="C:/Program Files/Java/jfreechart-1.0.1/lib/jcommon-1.0.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/Program Files/Java/orsoncharts-1.6/lib/orsoncharts-1.6.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
