@@ -1,7 +1,11 @@
+package Controllers;
+
 import Models.Campaign;
 import View.AdAuctionGUI;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Controller {
     public static void main(String[] args) {
@@ -14,6 +18,13 @@ public class Controller {
         // main metrics page
         adAuctionGUI.setMetricCalculator(campaign.newMetrics());
 
+        // example of date ranging
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime date1 = LocalDateTime.parse("2015-01-01 12:00:18", formatter);
+        LocalDateTime date2 = LocalDateTime.parse("2015-01-01 12:05:50", formatter);
+
+        adAuctionGUI.recalculateMetrics(date1, date2);
+
         // charts
         adAuctionGUI.setChart(campaign.newChart());
 
@@ -23,14 +34,10 @@ public class Controller {
         /*
          * to do:
          * blank gui
+         * load metrics and default chart button
          * update commenting for GUI
-         * improve file reading with anomalous data
-         * 2nd deliverable sprint plan
-         *
-         * for later:
-         * filtering was removed due to my bad implementation - leave till 2nd deliverable
-         * bounce factors are hardcoded - leave till 2nd & 3rd deliverables
-         * will later add a class HistogramCalculator - leave till 2nd & 3rd deliverables
+         * improve file reading with anomalous data - test on large dataset
+         * follow 2nd deliverable sprint plan
          */
     }
 }
