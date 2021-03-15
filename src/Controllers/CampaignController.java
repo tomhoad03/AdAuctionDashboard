@@ -7,28 +7,23 @@ import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Controller {
+public class CampaignController {
     public static void main(String[] args) {
-        // gui
-        AdAuctionGUI adAuctionGUI = new AdAuctionGUI();
-
         // campaign
         Campaign campaign = new Campaign("src/Logs/impression_log.csv", "src/Logs/click_log.csv", "src/Logs/server_log.csv");
 
-        // charts and metrics
-        adAuctionGUI.setMetricCalculator(campaign.newMetrics());
-        adAuctionGUI.setChart(campaign.newChart());
+        // gui
+        AdAuctionGUI adAuctionGUI = new AdAuctionGUI(campaign.newMetrics(), campaign.newChart());
+        SwingUtilities.invokeLater(adAuctionGUI::prepareGui);
 
         // example of date ranging - dates hardcoded
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime date1 = LocalDateTime.parse("2015-01-01 12:00:00", formatter);
-        LocalDateTime date2 = LocalDateTime.parse("2015-01-07 12:00:00", formatter);
+        LocalDateTime date1 = LocalDateTime.parse("2015-01-01 12:00:00", formatter); // start date
+        LocalDateTime date2 = LocalDateTime.parse("2015-01-07 12:00:00", formatter); // end date
 
         adAuctionGUI.recalculateMetrics(date1, date2);
-        adAuctionGUI.recalculateChart(date1, date2);
-
-        // load gui
-        SwingUtilities.invokeLater(adAuctionGUI::prepareGui);
+        adAuctionGUI.recalculateChart(date1, date2, "clicks");
+        // there are also methods of the same name with no parameters to show the whole range
 
         /*
          * to do:
