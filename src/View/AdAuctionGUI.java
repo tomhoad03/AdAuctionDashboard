@@ -723,24 +723,13 @@ public class AdAuctionGUI extends JFrame{
             return String.format("%.4g%n", metric); // change the 4 to change the dp
     }
 
-    // recalculates metrics on main page, no time range
+    // recalculates metrics on main page
     public void recalculateMetrics() {
         metricCalculator.calculateMetrics();
     }
 
-    // recalculates metrics on main page, with time range
-    public void recalculateMetrics(LocalDateTime startDate, LocalDateTime endDate) {
-        metricCalculator.calculateMetrics(startDate, endDate);
-    }
-
-    // recalculates chart, no time range
+    // recalculates chart
     public void recalculateChart(String granularity, String metric) {
-        updateChart(granularity, metric);
-    }
-
-    // recalculates chart, with time range
-    public void recalculateChart(LocalDateTime startDate, LocalDateTime endDate, String granularity, String metric) {
-        chart.recalculateChart(startDate, endDate);
         updateChart(granularity, metric);
     }
 
