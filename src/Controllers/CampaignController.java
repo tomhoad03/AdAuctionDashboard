@@ -7,11 +7,13 @@ import javax.swing.*;
 
 public class CampaignController {
     public static void main(String[] args) {
-        // campaign
+        // gui
+        AdAuctionGUI adAuctionGUI = new AdAuctionGUI();
         Campaign campaign = new Campaign("src/Logs/impression_log.csv", "src/Logs/click_log.csv", "src/Logs/server_log.csv");
 
-        // gui
-        AdAuctionGUI adAuctionGUI = new AdAuctionGUI(campaign.newMetrics(), campaign.newChart());
+        adAuctionGUI.updateMetrics(campaign.newMetrics());
+        adAuctionGUI.createCharts(campaign.newCharts());
+
         SwingUtilities.invokeLater(adAuctionGUI::prepareGui);
 
         /*
