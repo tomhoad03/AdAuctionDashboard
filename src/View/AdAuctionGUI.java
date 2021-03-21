@@ -488,7 +488,7 @@ public class AdAuctionGUI extends JFrame{
         metricsBox.addActionListener(e -> {
             String itemName = e.getSource().getClass().getName();
             arrayOfChoicesChart.set(0, itemName);
-            updateCharts();
+            updateChartMetrics();
         });
 
         JLabel metricsLabel = new JLabel("METRICS");
@@ -510,7 +510,7 @@ public class AdAuctionGUI extends JFrame{
         genderBox.addActionListener(e -> {
             String itemName = e.getSource().getClass().getName();
             arrayOfChoicesChart.set(1, itemName);
-            updateCharts();
+            recalculateCharts();
         });
 
         JLabel genderLabel = new JLabel("GENDER");
@@ -532,7 +532,7 @@ public class AdAuctionGUI extends JFrame{
         ageBox.addActionListener(e -> {
             String itemName = e.getSource().getClass().getName();
             arrayOfChoicesChart.set(2, itemName);
-            updateCharts();
+            recalculateCharts();
         });
 
         JLabel ageLabel = new JLabel("AGE");
@@ -554,7 +554,7 @@ public class AdAuctionGUI extends JFrame{
         contextBox.addActionListener(e -> {
             String itemName = e.getSource().getClass().getName();
             arrayOfChoicesChart.set(3, itemName);
-            updateCharts();
+            recalculateCharts();
         });
 
         JLabel contextLabel = new JLabel("CONTEXT");
@@ -576,7 +576,7 @@ public class AdAuctionGUI extends JFrame{
         incomeBox.addActionListener(e -> {
             String itemName = e.getSource().getClass().getName();
             arrayOfChoicesChart.set(4, itemName);
-            updateCharts();
+            recalculateCharts();
         });
 
         JLabel incomeLabel = new JLabel("INCOME");
@@ -698,12 +698,27 @@ public class AdAuctionGUI extends JFrame{
     // displays the initial chart when loaded
     public void createCharts(ChartCalculator calculator) {
         chartController.createCharts(calculator);
+        updateCharts();
     }
 
-    // displays the updated charts when changing the time granularity
-    public void updateCharts() {
-        chartController.updateCharts(arrayOfChoicesChart.get(5), arrayOfChoicesChart.get(6));
+    // changes the metrics display of a chart
+    public void updateChartMetrics() {
 
+    }
+
+    // calls the controller to recalculate the charts
+    public void recalculateCharts() {
+        chartController.updateCharts(arrayOfChoicesChart.get(1), // gender
+                arrayOfChoicesChart.get(2), // age
+                arrayOfChoicesChart.get(3), // context
+                arrayOfChoicesChart.get(4), // income
+                arrayOfChoicesChart.get(5), // start date
+                arrayOfChoicesChart.get(6)); // start date
+        updateCharts();
+    }
+
+    // displays the updated charts
+    public void updateCharts() {
         switch (arrayOfChoicesChart.get(7)) {
             case "Hours": {
                 chartPanel = new ChartPanel(chartController.getHoursChart());

@@ -14,13 +14,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class Chart extends ApplicationFrame {
 	private JFreeChart chart;
 
-	private final String chartTitle;
-	private final String metric;
+	private final String granularity;
+	private String chartTitle;
+	private String metric;
 
-	public Chart(String applicationTitle, String chartTitle, String metric) {
+	public Chart(String applicationTitle, String metric, String granularity) {
 		super(applicationTitle);
 
-		this.chartTitle = chartTitle;
+		this.granularity = granularity;
+		this.chartTitle = metric + " vs Time (" + granularity + ")";
 		this.metric = metric;
 
 		updateChart(new ChartCalculator());
@@ -32,7 +34,18 @@ public class Chart extends ApplicationFrame {
 
 	public void updateChart(ChartCalculator calculator) {
 		this.chart = ChartFactory.createLineChart(chartTitle,
-				"Time (Day) ","Number of " + metric,
+				"Time (" + granularity + ") ","Number of " + metric,
+				createDataset(metric, calculator),
+				PlotOrientation.VERTICAL,
+				true,true,false);
+	}
+
+	public void updateChart(ChartCalculator calculator, String metric) {
+		this.chartTitle = metric + " vs Time (" + granularity + ")";
+		this.metric = metric;
+
+		this.chart = ChartFactory.createLineChart(chartTitle,
+				"Time (" + granularity + ") ","Number of " + metric,
 				createDataset(metric, calculator),
 				PlotOrientation.VERTICAL,
 				true,true,false);
