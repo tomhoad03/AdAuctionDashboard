@@ -45,12 +45,12 @@ public class ChartCalculator extends Calculator {
 
     // recalculates intervals from given time range and filters
     public void calculateCharts(String granularity, String gender, String age, String context, String income) {
-        calculate(granularity, "Any", "Any", "Any", "Any", getImpressionLog().get(0).getDate(), getImpressionLog().get(getImpressionLog().size() - 1).getDate());
+        calculate(granularity, gender, age, context, income, getImpressionLog().get(0).getDate(), getImpressionLog().get(getImpressionLog().size() - 1).getDate());
     }
 
     // recalculates intervals from given time range and filters
     public void calculateCharts(String granularity, String gender, String age, String context, String income, LocalDateTime startDate, LocalDateTime endDate) {
-        calculate(granularity, "Any", "Any", "Any", "Any", startDate, endDate);
+        calculate(granularity, gender, age, context, income, startDate, endDate);
     }
 
 
@@ -266,9 +266,9 @@ public class ChartCalculator extends Calculator {
     public boolean filterEntry(Entry entry, String gender, String age, String context, String income) {
         User user = users.get(entry.getUserId());
 
-        if (user.getGender().equals(gender) && !gender.equals("Any")) {
-            if (user.getAge().equals(age) && !age.equals("Any")) {
-                return user.getIncome().equals(income) && !income.equals("Any");
+        if (user.getGender().equals(gender) || gender.equals("Any")) {
+            if (user.getAge().equals(age) || age.equals("Any")) {
+                return user.getIncome().equals(income) || income.equals("Any");
             }
         }
         return false;

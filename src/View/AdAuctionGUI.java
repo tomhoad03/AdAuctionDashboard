@@ -38,7 +38,7 @@ public class AdAuctionGUI extends JFrame{
         this.chartController = new ChartController();
         this.metricController = new MetricController();
 
-        chartPanel = new ChartPanel(new Chart("No Data", "Load Campaign To Display Charts", "Impressions").getChart());
+        chartPanel = new ChartPanel(new Chart("Blank Chart", "Impressions", "Days").getChart());
     }
 
     // displays the main window
@@ -508,7 +508,7 @@ public class AdAuctionGUI extends JFrame{
         genderBox.setFont(comboBoxFont);
 
         genderBox.addActionListener(e -> {
-            String itemName = e.getSource().getClass().getName();
+            String itemName = String.valueOf(genderBox.getSelectedItem());
             arrayOfChoicesChart.set(1, itemName);
             recalculateCharts();
         });
@@ -530,7 +530,7 @@ public class AdAuctionGUI extends JFrame{
         ageBox.setFont(comboBoxFont);
 
         ageBox.addActionListener(e -> {
-            String itemName = e.getSource().getClass().getName();
+            String itemName = String.valueOf(ageBox.getSelectedItem());
             arrayOfChoicesChart.set(2, itemName);
             recalculateCharts();
         });
@@ -552,7 +552,7 @@ public class AdAuctionGUI extends JFrame{
         contextBox.setFont(comboBoxFont);
 
         contextBox.addActionListener(e -> {
-            String itemName = e.getSource().getClass().getName();
+            String itemName = String.valueOf(contextBox.getSelectedItem());
             arrayOfChoicesChart.set(3, itemName);
             recalculateCharts();
         });
@@ -574,7 +574,7 @@ public class AdAuctionGUI extends JFrame{
         incomeBox.setFont(comboBoxFont);
 
         incomeBox.addActionListener(e -> {
-            String itemName = e.getSource().getClass().getName();
+            String itemName = String.valueOf(incomeBox.getSelectedItem());
             arrayOfChoicesChart.set(4, itemName);
             recalculateCharts();
         });
