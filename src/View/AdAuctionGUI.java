@@ -8,6 +8,7 @@ import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -192,11 +193,13 @@ public class AdAuctionGUI extends JFrame {
 
     // displays the constant horizontal menu at the top
     public void createTopMenu(){
-        JLayeredPane topMenu = new JLayeredPane();
+        JPanel topMenu = new JPanel(new GridLayout(1, 2));
         topMenu.setSize(gui.getWidth(),100);
         topMenu.setOpaque(true);
         topMenu.setBackground(new Color(14,139,229));
+        topMenu.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+        // product title
         JLabel productName = new JLabel("Ad Monitor");
         productName.setBackground(primaryColor);
         productName.setSize(100,100);
@@ -205,14 +208,25 @@ public class AdAuctionGUI extends JFrame {
         productName.setForeground(Color.WHITE);
         productName.setFont(mainFont);
 
-        JLabel customerName = new JLabel("Customer Name");
-        productName.setSize(100,100);
-        customerName.setBounds(gui.getWidth()-120,0,100,100);
-        customerName.setForeground(Color.WHITE);
+        // load campaign button
+        JPanel loadCampaignButtonPanel = new JPanel(new BorderLayout());
+        loadCampaignButtonPanel.setOpaque(false);
 
-        topMenu.add(productName,BorderLayout.WEST,0);
-        topMenu.add(customerName,BorderLayout.EAST,1);
-        menu.add(topMenu,BorderLayout.NORTH,1);
+        JButton loadCampaignButton = new JButton("Load Campaign");
+        loadCampaignButton.setFont(mainFont);
+        loadCampaignButton.setBorderPainted(false);
+        loadCampaignButton.setContentAreaFilled(false);
+        loadCampaignButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        loadCampaignButton.setForeground(Color.WHITE);
+
+        loadCampaignButtonPanel.add(loadCampaignButton, BorderLayout.EAST);
+
+        // load files of campaign
+        loadCampaignButton.addActionListener(e -> createCampaign());
+
+        topMenu.add(productName, BorderLayout.WEST,0);
+        topMenu.add(loadCampaignButtonPanel, BorderLayout.CENTER,1);
+        menu.add(topMenu, BorderLayout.NORTH,1);
     }
 
     // displays the metrics page

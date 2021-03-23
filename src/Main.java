@@ -7,16 +7,12 @@ public class Main {
         // gui
         AdAuctionGUI adAuctionGUI = new AdAuctionGUI();
         SwingUtilities.invokeLater(adAuctionGUI::prepareGui);
-
-        // load files of campaign
-        adAuctionGUI.createCampaign();
     }
 
     /*
      * to do:
-     * significant speed improvements
-     * not every metric is being calculated/displayed properly
-     * load campaign from files button
+     * significant speed improvements (now easier to measure with load button)
+     * check every metric is being calculated/displayed properly
      * filter dropdowns for metrics page
      * improve file reading with anomalous data
      * merge histogram and compare features
