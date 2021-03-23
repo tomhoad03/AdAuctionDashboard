@@ -1,5 +1,6 @@
 package View;
 
+import Controllers.CampaignController;
 import Controllers.ChartController;
 import Controllers.MetricController;
 import Models.*;
@@ -11,7 +12,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class AdAuctionGUI extends JFrame{
+public class AdAuctionGUI extends JFrame {
+    // primary gui components
     private JFrame gui;
     private JLayeredPane menu;
     private JPanel insightsGrid;
@@ -29,21 +31,24 @@ public class AdAuctionGUI extends JFrame{
 
     private final ArrayList<String> arrayOfChoicesChart = new ArrayList<>();
 
-    private final ChartController chartController;
+    // model controllers
+    private final CampaignController campaignController;
     private final MetricController metricController;
+    private final ChartController chartController;
 
+    // gui styling
     private final Color primaryColor = new Color(14,139,229);
     private final Color secondaryColor = new Color(220,120,27);
     private final Color tertiaryColor = new Color(242,236,236);
-
     private final Font mainFont = new Font("Impact", Font.PLAIN, 15);
     private final Font fontOfText = new Font("Impact", Font.PLAIN, 25);
     private final Font fontOfValue = new Font("Impact", Font.BOLD, 30);
 
     // initialises the display controllers
     public AdAuctionGUI() {
-        this.chartController = new ChartController();
+        this.campaignController = new CampaignController();
         this.metricController = new MetricController();
+        this.chartController = new ChartController();
 
         chartPanel = new ChartPanel(new Chart("Blank Chart", "Impressions", "Days").getChart());
     }
@@ -484,7 +489,7 @@ public class AdAuctionGUI extends JFrame{
         Font comboBoxFont = new Font(chartsButton.getFont().getName(), Font.PLAIN, 14);
 
         //start Box
-        String[] metricsChoices = new String[]{"Impressions", "CPA", "CPC", "CPM", "CTR", "Uniques", "Bounce", "Bounce Rate", "Clicks", "Conversions", "Total Cost"};
+        String[] metricsChoices = new String[]{"Impressions", "CPA", "CPC", "CPM", "CTR", "Uniques", "Bounces", "Bounce Rate", "Clicks", "Conversions", "Total Impression Cost"};
         JComboBox<String> metricsBox = new JComboBox<>(metricsChoices);
         metricsBox.setVisible(true);
         metricsBox.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -687,12 +692,18 @@ public class AdAuctionGUI extends JFrame{
     }
 
     // converts a metric to a readable string
-    public String toString(float metric)
-    {
+    public String toString(float metric) {
         if (metric == (int) metric)
             return String.format("%d", (int) metric);
         else
             return String.format("%.4g%n", metric); // change the 4 to change the dp
+    }
+
+    // loads the files
+    public void createCampaign() {
+        campaignController.createCampaign();
+        createMetrics(campaignController.createMetrics());
+        createCharts(campaignController.createCharts());
     }
 
     // displays the metrics when loaded
