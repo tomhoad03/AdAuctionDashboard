@@ -5,7 +5,6 @@ import Controllers.ChartController;
 import Controllers.MetricController;
 import Models.*;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -50,6 +49,7 @@ public class AdAuctionGUI extends JFrame {
     private final ArrayList<String> arrayOfChoicesChart = new ArrayList<>();
     private final ArrayList<String> arrayOfChoicesHistogram = new ArrayList<>();
     // private final ArrayList<JFreeChart> chartsToCompare = new ArrayList<>();
+    private int countCharts = 0;
 
     // model controllers
     private final CampaignController campaignController;
@@ -78,11 +78,12 @@ public class AdAuctionGUI extends JFrame {
     // displays the main window
     public void prepareGui() {
         gui = new JFrame("Ad Auction Monitor");
-        gui.setVisible(true);
         gui.setResizable(false);
+        gui.setUndecorated(true);
         gui.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        gui.setVisible(true);
         createMenu();
         gui.add(menu);
     }
@@ -255,9 +256,7 @@ public class AdAuctionGUI extends JFrame {
         loadCampaignButtonPanel.add(loadCampaignButton, BorderLayout.EAST);
 
         // load files of campaign
-        loadCampaignButton.addActionListener(e -> {
-            createFileLoadBox();
-        });
+        loadCampaignButton.addActionListener(e -> createFileLoadBox());
 
         // TESTING ONLY
         // fast load campaign button
@@ -354,7 +353,7 @@ public class AdAuctionGUI extends JFrame {
 
     // displays the load files page
     public void createFileLoadBox() {
-        GridLayout filesMenuLayout = new GridLayout(7, 1);
+        GridLayout filesMenuLayout = new GridLayout(8, 1);
         filesMenuLayout.setVgap(10);
 
         filesMenu = new JPanel(filesMenuLayout);
@@ -454,10 +453,26 @@ public class AdAuctionGUI extends JFrame {
         loadCampaignButton.addActionListener(e -> {
             try {
                 createCampaign();
-                filesMenu.setVisible(false);
+
+                menu.remove(filesMenu);
+                menu.revalidate();
+                menu.repaint();
             } catch (Exception invalidCampaignE) {
                 JOptionPane.showMessageDialog(null, "Invalid campaign files!");
             }
+        });
+
+        JButton cancelLoadCampaign = new JButton("Cancel");
+        cancelLoadCampaign.setFont(mainFont);
+        cancelLoadCampaign.setBorderPainted(false);
+        cancelLoadCampaign.setBackground(noColor);
+        cancelLoadCampaign.setForeground(Color.RED);
+        cancelLoadCampaign.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        cancelLoadCampaign.addActionListener(e -> {
+            menu.remove(filesMenu);
+            menu.revalidate();
+            menu.repaint();
         });
 
         impressionFileLabel = new JLabel("No File");
@@ -474,6 +489,7 @@ public class AdAuctionGUI extends JFrame {
         filesMenu.add(clickFileLabel, 4);
         filesMenu.add(serverFileLabel, 5);
         filesMenu.add(loadCampaignButton, 6);
+        filesMenu.add(cancelLoadCampaign, 7);
 
         menu.add(filesMenu, 100);
     }
@@ -1009,55 +1025,60 @@ public class AdAuctionGUI extends JFrame {
         addChartToComparePanel.add(addChartToCompareButton);
 
         addChartToCompareButton.addActionListener(e -> {
-            JPanel panel = new JPanel(new GridBagLayout());
-            JPanel chartJPanel = new JPanel(new BorderLayout());
+            if (countCharts < 4) {
+                JPanel panel = new JPanel(new GridBagLayout());
+                JPanel chartJPanel = new JPanel(new BorderLayout());
+                countCharts++;
 
-            switch (arrayOfChoicesChart.get(7)) {
-                case "Hours": {
-                    ChartPanel chartPanel = new ChartPanel(chartController.getHoursChart());
-                    chartPanel.setPreferredSize(new Dimension(500, 300));
-                    chartJPanel.add(chartPanel);
-                    chartJPanel.validate();
-                    panel.add(chartJPanel);
-                    compareChartsGrid.add(panel);
-                    break;
+                switch (arrayOfChoicesChart.get(7)) {
+                    case "Hours": {
+                        ChartPanel chartPanel = new ChartPanel(chartController.getHoursChart());
+                        chartPanel.setPreferredSize(new Dimension(500, 300));
+                        chartJPanel.add(chartPanel);
+                        chartJPanel.validate();
+                        panel.add(chartJPanel);
+                        compareChartsGrid.add(panel);
+                        break;
+                    }
+                    case "Days": {
+                        ChartPanel chartPanel = new ChartPanel(chartController.getDaysChart());
+                        chartPanel.setPreferredSize(new Dimension(500, 300));
+                        chartJPanel.add(chartPanel);
+                        chartJPanel.validate();
+                        panel.add(chartJPanel);
+                        compareChartsGrid.add(panel);
+                        break;
+                    }
+                    case "Weeks": {
+                        ChartPanel chartPanel = new ChartPanel(chartController.getWeeksChart());
+                        chartPanel.setPreferredSize(new Dimension(500, 300));
+                        chartJPanel.add(chartPanel);
+                        chartJPanel.validate();
+                        panel.add(chartJPanel);
+                        compareChartsGrid.add(panel);
+                        break;
+                    }
+                    case "Months": {
+                        ChartPanel chartPanel = new ChartPanel(chartController.getMonthsChart());
+                        chartPanel.setPreferredSize(new Dimension(500, 300));
+                        chartJPanel.add(chartPanel);
+                        chartJPanel.validate();
+                        panel.add(chartJPanel);
+                        compareChartsGrid.add(panel);
+                        break;
+                    }
+                    case "Years": {
+                        ChartPanel chartPanel = new ChartPanel(chartController.getYearsChart());
+                        chartPanel.setPreferredSize(new Dimension(500, 300));
+                        chartJPanel.add(chartPanel);
+                        chartJPanel.validate();
+                        panel.add(chartJPanel);
+                        compareChartsGrid.add(panel);
+                        break;
+                    }
                 }
-                case "Days": {
-                    ChartPanel chartPanel = new ChartPanel(chartController.getDaysChart());
-                    chartPanel.setPreferredSize(new Dimension(500, 300));
-                    chartJPanel.add(chartPanel);
-                    chartJPanel.validate();
-                    panel.add(chartJPanel);
-                    compareChartsGrid.add(panel);
-                    break;
-                }
-                case "Weeks": {
-                    ChartPanel chartPanel = new ChartPanel(chartController.getWeeksChart());
-                    chartPanel.setPreferredSize(new Dimension(500, 300));
-                    chartJPanel.add(chartPanel);
-                    chartJPanel.validate();
-                    panel.add(chartJPanel);
-                    compareChartsGrid.add(panel);
-                    break;
-                }
-                case "Months": {
-                    ChartPanel chartPanel = new ChartPanel(chartController.getMonthsChart());
-                    chartPanel.setPreferredSize(new Dimension(500, 300));
-                    chartJPanel.add(chartPanel);
-                    chartJPanel.validate();
-                    panel.add(chartJPanel);
-                    compareChartsGrid.add(panel);
-                    break;
-                }
-                case "Years": {
-                    ChartPanel chartPanel = new ChartPanel(chartController.getYearsChart());
-                    chartPanel.setPreferredSize(new Dimension(500, 300));
-                    chartJPanel.add(chartPanel);
-                    chartJPanel.validate();
-                    panel.add(chartJPanel);
-                    compareChartsGrid.add(panel);
-                    break;
-                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Can't add more than 4 charts to compare");
             }
         });
 
