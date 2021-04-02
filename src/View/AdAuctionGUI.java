@@ -584,6 +584,50 @@ public class AdAuctionGUI extends JFrame {
         incomeVerticalBox.add(incomeBox);
         //end box
 
+        //start Box
+        String[] startDateChoices = new String[]{"Any"};
+        JComboBox<String> startDateBox = new JComboBox<>(startDateChoices);
+        startDateBox.setVisible(true);
+        startDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        startDateBox.setFont(comboBoxFont);
+
+        startDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(startDateBox.getSelectedItem());
+            arrayOfChoicesMetrics.set(5, itemName);
+            recalculateMetrics();
+        });
+
+        JLabel startDateLabel = new JLabel("START DATE");
+        startDateLabel.setFont(mainFont);
+        startDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box startDateVerticalBox = Box.createVerticalBox();
+        startDateVerticalBox.add(startDateLabel);
+        startDateVerticalBox.add(startDateBox);
+        //end box
+
+        //start Box
+        String[] endDateChoices = new String[]{"Any"};
+        JComboBox<String> endDateBox = new JComboBox<>(endDateChoices);
+        endDateBox.setVisible(true);
+        endDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        endDateBox.setFont(comboBoxFont);
+
+        endDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(endDateBox.getSelectedItem());
+            arrayOfChoicesMetrics.set(6, itemName);
+            recalculateMetrics();
+        });
+
+        JLabel endDateLabel = new JLabel("END DATE");
+        endDateLabel.setFont(mainFont);
+        endDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box endDateVerticalBox = Box.createVerticalBox();
+        endDateVerticalBox.add(endDateLabel);
+        endDateVerticalBox.add(endDateBox);
+        //end box
+
         Box metricsNorthBox = Box.createHorizontalBox();
         metricsNorthBox.setPreferredSize(new Dimension(metricsGrid.getWidth(),72));
         metricsNorthBox.setBorder(new EmptyBorder(10,10,10,10));
@@ -591,6 +635,8 @@ public class AdAuctionGUI extends JFrame {
         metricsNorthBox.add(ageVerticalBox);
         metricsNorthBox.add(contextVerticalBox);
         metricsNorthBox.add(incomeVerticalBox);
+        metricsNorthBox.add(startDateVerticalBox);
+        metricsNorthBox.add(endDateVerticalBox);
 
         metricsGrid.add(metricsNorthBox, BorderLayout.NORTH);
     }
@@ -972,6 +1018,48 @@ public class AdAuctionGUI extends JFrame {
         incomeVerticalBox.add(incomeBox);
         //end box
 
+        //start Box
+        String[] startDateChoices = new String[]{"Any"};
+        JComboBox<String> startDateBox = new JComboBox<>(startDateChoices);
+        startDateBox.setVisible(true);
+        startDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        startDateBox.setFont(comboBoxFont);
+
+        startDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(startDateBox.getSelectedItem());
+            arrayOfChoicesHistogram.set(5, itemName);
+        });
+
+        JLabel startDateLabel = new JLabel("START DATE");
+        startDateLabel.setFont(mainFont);
+        startDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box startDateVerticalBox = Box.createVerticalBox();
+        startDateVerticalBox.add(startDateLabel);
+        startDateVerticalBox.add(startDateBox);
+        //end box
+
+        //start Box
+        String[] endDateChoices = new String[]{"Any"};
+        JComboBox<String> endDateBox = new JComboBox<>(endDateChoices);
+        endDateBox.setVisible(true);
+        endDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        endDateBox.setFont(comboBoxFont);
+
+        endDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(endDateBox.getSelectedItem());
+            arrayOfChoicesHistogram.set(6, itemName);
+        });
+
+        JLabel endDateLabel = new JLabel("END DATE");
+        endDateLabel.setFont(mainFont);
+        endDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box endDateVerticalBox = Box.createVerticalBox();
+        endDateVerticalBox.add(endDateLabel);
+        endDateVerticalBox.add(endDateBox);
+        //end box
+
         Box chartNorthBox = Box.createHorizontalBox();
         chartNorthBox.setPreferredSize(new Dimension(metricsGrid.getWidth(),72));
         chartNorthBox.setBorder(new EmptyBorder(10,10,10,10));
@@ -980,6 +1068,8 @@ public class AdAuctionGUI extends JFrame {
         chartNorthBox.add(ageVerticalBox);
         chartNorthBox.add(contextVerticalBox);
         chartNorthBox.add(incomeVerticalBox);
+        chartNorthBox.add(startDateVerticalBox);
+        chartNorthBox.add(endDateVerticalBox);
 
         chartsGrid.add(chartNorthBox, BorderLayout.NORTH);
     }
@@ -1231,6 +1321,48 @@ public class AdAuctionGUI extends JFrame {
         incomeVerticalBox.add(incomeBox);
         //end box
 
+        //start Box
+        String[] startDateChoices = new String[]{"Any"};
+        JComboBox<String> startDateBox = new JComboBox<>(startDateChoices);
+        startDateBox.setVisible(true);
+        startDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        startDateBox.setFont(comboBoxFont);
+
+        startDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(startDateBox.getSelectedItem());
+            arrayOfChoicesHistogram.set(5, itemName);
+        });
+
+        JLabel startDateLabel = new JLabel("START DATE");
+        startDateLabel.setFont(mainFont);
+        startDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box startDateVerticalBox = Box.createVerticalBox();
+        startDateVerticalBox.add(startDateLabel);
+        startDateVerticalBox.add(startDateBox);
+        //end box
+
+        //start Box
+        String[] endDateChoices = new String[]{"Any"};
+        JComboBox<String> endDateBox = new JComboBox<>(endDateChoices);
+        endDateBox.setVisible(true);
+        endDateBox.setBorder(new EmptyBorder(5,5,5,5));
+        endDateBox.setFont(comboBoxFont);
+
+        endDateBox.addActionListener(e -> {
+            String itemName = String.valueOf(endDateBox.getSelectedItem());
+            arrayOfChoicesHistogram.set(6, itemName);
+        });
+
+        JLabel endDateLabel = new JLabel("END DATE");
+        endDateLabel.setFont(mainFont);
+        endDateLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        Box endDateVerticalBox = Box.createVerticalBox();
+        endDateVerticalBox.add(endDateLabel);
+        endDateVerticalBox.add(endDateBox);
+        //end box
+
         Box histogramNorthBox = Box.createHorizontalBox();
         histogramNorthBox.setPreferredSize(new Dimension(metricsGrid.getWidth(),72));
         histogramNorthBox.setBorder(new EmptyBorder(10,10,10,10));
@@ -1239,6 +1371,8 @@ public class AdAuctionGUI extends JFrame {
         histogramNorthBox.add(ageVerticalBox);
         histogramNorthBox.add(contextVerticalBox);
         histogramNorthBox.add(incomeVerticalBox);
+        histogramNorthBox.add(startDateVerticalBox);
+        histogramNorthBox.add(endDateVerticalBox);
 
         histogramGrid.add(histogramNorthBox,BorderLayout.NORTH);
     }
@@ -1380,13 +1514,17 @@ public class AdAuctionGUI extends JFrame {
 
     // calls the controller to recalculate the metrics
     public void recalculateMetrics() {
-        metricController.updateMetrics(arrayOfChoicesMetrics.get(1), // gender
-                arrayOfChoicesMetrics.get(2), // age
-                arrayOfChoicesMetrics.get(3), // context
-                arrayOfChoicesMetrics.get(4), // income
-                arrayOfChoicesMetrics.get(5), // start date
-                arrayOfChoicesMetrics.get(6)); // start date
-        updateMetrics();
+        try {
+            metricController.updateMetrics(arrayOfChoicesMetrics.get(1), // gender
+                    arrayOfChoicesMetrics.get(2), // age
+                    arrayOfChoicesMetrics.get(3), // context
+                    arrayOfChoicesMetrics.get(4), // income
+                    arrayOfChoicesMetrics.get(5), // start date
+                    arrayOfChoicesMetrics.get(6)); // start date
+            updateMetrics();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No campaign loaded!");
+        }
     }
 
     // displays the updated metrics
@@ -1477,14 +1615,18 @@ public class AdAuctionGUI extends JFrame {
 
     // calls the controller to recalculate the charts
     public void recalculateCharts() {
-        chartController.updateCharts(arrayOfChoicesChart.get(0), // metric
-                arrayOfChoicesChart.get(1), // gender
-                arrayOfChoicesChart.get(2), // age
-                arrayOfChoicesChart.get(3), // context
-                arrayOfChoicesChart.get(4), // income
-                arrayOfChoicesChart.get(5), // start date
-                arrayOfChoicesChart.get(6)); // start date
-        updateCharts();
+        try {
+            chartController.updateCharts(arrayOfChoicesChart.get(0), // metric
+                    arrayOfChoicesChart.get(1), // gender
+                    arrayOfChoicesChart.get(2), // age
+                    arrayOfChoicesChart.get(3), // context
+                    arrayOfChoicesChart.get(4), // income
+                    arrayOfChoicesChart.get(5), // start date
+                    arrayOfChoicesChart.get(6)); // start date
+            updateCharts();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No campaign loaded!");
+        }
     }
 
     // displays the updated charts
