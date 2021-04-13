@@ -19,7 +19,7 @@ public class ChartController {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    // all charts have a default display
+    // all charts are given a default display
     public ChartController() {
         this.hoursChart = new Chart("Hours Chart","Impressions", "Hours");
         this.daysChart = new Chart("Days Chart", "Impressions", "Days");
@@ -28,8 +28,9 @@ public class ChartController {
         this.yearsChart = new Chart("Years Chart",  "Impressions", "Years");
     }
 
-    // populates charts with data and default filtering
+    // initial charts display data with no filtering and the entire time range
     public void createCharts(ChartCalculator chartCalculator) {
+        // initial calculation of data intervals (for each chart point)
         chartCalculator.calculateIntervals(null, null);
 
         chartCalculator.calculateFilters("hours", "Any" ,"Any", "Any", "Any", null, null);
@@ -50,7 +51,7 @@ public class ChartController {
         this.chartCalculator = chartCalculator;
     }
 
-    // filters the charts
+    // filters the charts, also updates data intervals if they need to change
     public void updateCharts(String metric, String gender, String age, String context, String income, String stringStartDate, String stringEndDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDate, endDate;
@@ -67,7 +68,7 @@ public class ChartController {
             endDate = LocalDateTime.parse(stringEndDate, formatter);
         }
 
-        // update intervals if the ranges change
+        // update intervals only if the ranges need to change
         if (!(this.startDate == startDate) || !(this.endDate == endDate)) {
             chartCalculator.calculateIntervals(startDate, endDate);
         }
