@@ -49,6 +49,14 @@ public class ChartController {
         this.yearsChart.updateChart(chartCalculator);
 
         this.chartCalculator = chartCalculator;
+
+        /*
+        this method is a little weird due to the nature of the chart calculator class
+        1. the chart calculator stores the data points for only the last granularity filtered
+        2. an alternate method would be to store a list of each metric for each granularity so that the method calculateFilters() only needs to be called once
+        3. this would also apply to the updateCharts() method below
+        4. during increment 3 i may change some of these method names to be clearer but we don't have a huge amount of time for it to matter
+         */
     }
 
     // filters the charts, also updates data intervals if they need to change

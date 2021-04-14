@@ -79,10 +79,12 @@ public class ChartCalculator extends Calculator {
 
     // splits the data into intervals that represent the points on the graph - each interval is turned into a new calculator
     public ArrayList<MetricCalculator> createIntervals(ArrayList<LocalDateTime> dates, LocalDateTime startDate, LocalDateTime endDate) {
+        // gets the list of all logs in the time range
         ArrayList<ImpressionEntry> impressionList = getImpressionLog(startDate, endDate); // list of impressions
         ArrayList<ClickEntry> clickList = getClickLog(startDate, endDate); // list of clicks
         ArrayList<ServerEntry> serverList = getServerLog(startDate, endDate); // list of server entries
 
+        // used to store the intervals of data
         ArrayList<MetricCalculator> intervalCalculators = new ArrayList<>(); // list of calculators for log entries in each interval
         ArrayList<ArrayList<ImpressionEntry>> intervalImpressionLogs = new ArrayList<>(); // list of impression logs in each interval
         ArrayList<ArrayList<ClickEntry>> intervalClickLogs = new ArrayList<>(); // list of click logs in each interval
@@ -177,7 +179,7 @@ public class ChartCalculator extends Calculator {
             }
         }
 
-        // creates all the calculators for the intervals (probably doesn't need the if from now on)
+        // combines the intervals of logs to create calculators for each of the intervals
         if (intervalImpressionLogs.size() == intervalClickLogs.size() && intervalImpressionLogs.size() == intervalServerLogs.size()) {
             for (int i=0; i < intervalImpressionLogs.size(); i++) {
                 intervalCalculators.add(new MetricCalculator(intervalImpressionLogs.get(i), intervalClickLogs.get(i), intervalServerLogs.get(i), getUsers()));
@@ -254,23 +256,6 @@ public class ChartCalculator extends Calculator {
         this.cpcList = new ArrayList<>();
         this.cpmList = new ArrayList<>();
         this.brList = new ArrayList<>();
-    }
-
-    // allows the entry to be counted if it matches the filters
-    public boolean filterEntry(Entry entry, String gender, String age, String income) {
-        User user = getUsers().get(entry.getUserId());
-
-        if (user.getGender().equals(gender) || gender.equals("Any")) {
-            if (user.getAge().equals(age) || age.equals("Any")) {
-                return user.getIncome().equals(income) || income.equals("Any");
-            }
-        }
-        return false;
-    }
-
-    // filters the context for impressions only
-    public boolean filterContext(ImpressionEntry impressionEntry, String context) {
-        return impressionEntry.getContext().equals(context) || context.equals("Any");
     }
 
     public ArrayList<Integer> getImpressionsNoList() {
