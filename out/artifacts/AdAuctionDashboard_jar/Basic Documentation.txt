@@ -1,5 +1,0 @@
-1. Unzip folder
-2. Go to folder with jar
-3. Open cmd at that location
-4. type "java -jar AdAuctionDashboard.jar"
-5. csv files must be in the same folder and of the given names
