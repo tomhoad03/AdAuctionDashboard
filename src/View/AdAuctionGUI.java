@@ -6,6 +6,7 @@ import Models.*;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -40,7 +41,6 @@ public class AdAuctionGUI extends JFrame {
     private String impressionsFileLocation, clickFileLocation, serverFileLocation;
     private JLabel productName;
     private JButton loadCampaignButton;
-    private JButton fastCampaignButton;
 
     // components for metrics
     private JComboBox<String> metricsGenderBox, metricsAgeBox, metricsContextBox, metricsIncomeBox;
@@ -64,7 +64,8 @@ public class AdAuctionGUI extends JFrame {
 
     // components for compare
     private JPanel compareGrid, compareChartsGrid;
-    private JButton resetCompareButton, addChartToCompareButton;
+    private JButton resetCompareButton, addChartToCompareButton, saveChartToFileButton;
+    private JLabel chartNumber;
 
     // components for settings page
     private JPanel settingsGrid;
@@ -346,7 +347,7 @@ public class AdAuctionGUI extends JFrame {
 
         // product title
         //components for top menu
-        productName = new JLabel("Ad Monitor");
+        productName = new JLabel("Ad Auction Dashboard");
         productName.setBackground(primaryColor);
         productName.setSize(100,100);
         productName.setAlignmentX(20);
@@ -370,24 +371,6 @@ public class AdAuctionGUI extends JFrame {
         // load files of campaign
         loadCampaignButton.addActionListener(e -> createFileLoadBox());
 
-        // TESTING ONLY
-        // fast load campaign button
-        JPanel fastCampaignButtonPanel = new JPanel(new BorderLayout());
-        fastCampaignButtonPanel.setOpaque(false);
-
-        fastCampaignButton = new JButton("Fast Load Campaign (TESTING/DEMONSTRATION ONLY!)");
-        fastCampaignButton.setFont(mainFont);
-        fastCampaignButton.setBorderPainted(false);
-        fastCampaignButton.setContentAreaFilled(false);
-        fastCampaignButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        fastCampaignButton.setForeground(noColor);
-
-        fastCampaignButtonPanel.add(fastCampaignButton);
-
-        // fast load files of campaign
-        fastCampaignButton.addActionListener(e -> fastCreateCampaign());
-        // TESTING ONLY
-
         // close the program
         JButton closeButton = new RoundButton("X");
 
@@ -400,7 +383,6 @@ public class AdAuctionGUI extends JFrame {
 
         Box topRight = Box.createHorizontalBox();
         topRight.add(loadCampaignButtonPanel);
-        topRight.add(fastCampaignButtonPanel); // TEMPORARY FOR TESTING ONLY
         topRight.add(closeButton);
         topRight.setBounds(gui.getWidth()-200,0,200,100);
 
@@ -1444,6 +1426,9 @@ public class AdAuctionGUI extends JFrame {
             if (countCharts < 4) {
                 JPanel panel = new JPanel(new GridBagLayout());
                 JPanel chartJPanel = new JPanel(new BorderLayout());
+                chartNumber = new JLabel("Chart " + (countCharts + 1));
+                chartNumber.setFont(mainFont);
+                panel.add(chartNumber);
                 countCharts++;
 
                 switch (arrayOfChoicesChart.get(7)) {
@@ -1503,12 +1488,42 @@ public class AdAuctionGUI extends JFrame {
             }
         });
 
+        JPanel saveChartToFilePanel = new JPanel(new GridBagLayout());
+        saveChartToFilePanel.setOpaque(false);
+        saveChartToFilePanel.setBorder(new EmptyBorder(10,10,10,10));
+
+        saveChartToFileButton = new JButton("Save Chart");
+        saveChartToFileButton.setFont(mainFont);
+        saveChartToFileButton.setBackground(primaryColor);
+        saveChartToFileButton.setForeground(noColor);
+        saveChartToFileButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        saveChartToFileButton.setPreferredSize(new Dimension(400,40));
+
+        saveChartToFileButton.addActionListener(e -> {
+            try {
+                JFrame parentFrame = new JFrame();
+
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Save a chart");
+
+                int userSelection = fileChooser.showSaveDialog(parentFrame);
+
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    ChartUtilities.saveChartAsJPEG(new File(fileToSave.getAbsolutePath() + ".jpg"), chartPanel.getChart(), 1920, 1080);
+                }
+            } catch (Exception ignored) { }
+        });
+
+        saveChartToFilePanel.add(saveChartToFileButton);
+
         JPanel chartSouthGrid = new JPanel(new GridLayout(1, 2));
         chartSouthGrid.setPreferredSize(new Dimension(chartsGrid.getWidth(),200));
         chartSouthGrid.setBorder(new EmptyBorder(10,10,10,10));
 
         chartSouthGrid.add(chartSlider);
         chartSouthGrid.add(addChartToComparePanel);
+        chartSouthGrid.add(saveChartToFilePanel);
 
         chartsGrid.add(chartSouthGrid,BorderLayout.SOUTH);
     }
@@ -1764,7 +1779,7 @@ public class AdAuctionGUI extends JFrame {
         pageLimitLabel.setForeground(secondaryColor);
         pageLimitLabel.setFont(mainFont);
 
-        String[] pageLimitChoices = new String[] {"1", "2", "3", "4", "5"};
+        String[] pageLimitChoices = new String[] {"None", "1", "2", "3", "4", "5"};
         pageLimitComboBox = new JComboBox<>(pageLimitChoices);
         pageLimitComboBox.setVisible(true);
         pageLimitComboBox.setOpaque(false);
@@ -1772,10 +1787,14 @@ public class AdAuctionGUI extends JFrame {
         pageLimitComboBox.setMaximumSize(new Dimension(100,35));
         pageLimitComboBox.setBorder(new EmptyBorder(5,5,5,5));
         pageLimitComboBox.setFont(comboBoxFont);
-        pageLimitComboBox.setSelectedIndex(0);
+        pageLimitComboBox.setSelectedIndex(2);
 
         pageLimitComboBox.addActionListener(e -> {
-            pageLimit = Integer.parseInt(String.valueOf(pageLimitComboBox.getSelectedItem()));
+            if (String.valueOf(pageLimitComboBox.getSelectedItem()).equals("None")) {
+                pageLimit = 0;
+            } else {
+                pageLimit = Integer.parseInt(String.valueOf(pageLimitComboBox.getSelectedItem()));
+            }
             metricController.updateBounce(pageLimit, bounceTime);
             chartController.updateBounce(pageLimit, bounceTime);
             recalculateMetrics();
@@ -1788,7 +1807,7 @@ public class AdAuctionGUI extends JFrame {
         bounceTimeLabel.setForeground(secondaryColor);
         bounceTimeLabel.setFont(mainFont);
 
-        String[] bounceTimeChoices = new String[] {"100", "500", "1000", "2500"};
+        String[] bounceTimeChoices = new String[] {"None", "100", "500", "1000", "2500"};
         bounceTimeComboBox = new JComboBox<>(bounceTimeChoices);
         bounceTimeComboBox.setVisible(true);
         bounceTimeComboBox.setOpaque(false);
@@ -1796,10 +1815,14 @@ public class AdAuctionGUI extends JFrame {
         bounceTimeComboBox.setMaximumSize(new Dimension(100,35));
         bounceTimeComboBox.setBorder(new EmptyBorder(5,5,5,5));
         bounceTimeComboBox.setFont(comboBoxFont);
-        bounceTimeComboBox.setSelectedIndex(0);
+        bounceTimeComboBox.setSelectedIndex(2);
 
         bounceTimeComboBox.addActionListener(e -> {
-            bounceTime = Integer.parseInt(String.valueOf(bounceTimeComboBox.getSelectedItem()));
+            if (String.valueOf(bounceTimeComboBox.getSelectedItem()).equals("None")) {
+                bounceTime = 0;
+            } else {
+                bounceTime = Integer.parseInt(String.valueOf(bounceTimeComboBox.getSelectedItem()));
+            }
             metricController.updateBounce(pageLimit, bounceTime);
             chartController.updateBounce(pageLimit, bounceTime);
             recalculateMetrics();
@@ -1870,10 +1893,12 @@ public class AdAuctionGUI extends JFrame {
         fontLabel.setForeground(secondaryColor);
         primaryColorLabel.setForeground(secondaryColor);
         secondaryColorLabel.setForeground(secondaryColor);
+        pageLimitLabel.setForeground(secondaryColor);
         bounceTimeLabel.setForeground(secondaryColor);
         topMenu.setBackground(primaryColor);
         addChartToCompareButton.setBackground(primaryColor);
         resetCompareButton.setBackground(primaryColor);
+        saveChartToFileButton.setBackground(primaryColor);
     }
 
     public void updateFont(){
@@ -1910,13 +1935,13 @@ public class AdAuctionGUI extends JFrame {
         settingsButton.setFont(mainFont);
         productName.setFont(mainFont);
         loadCampaignButton.setFont(mainFont);
-        fastCampaignButton.setFont(mainFont);
         addChartToCompareButton.setFont(mainFont);
         resetCompareButton.setFont(mainFont);
         fontLabel.setFont(mainFont);
         primaryColorLabel.setFont(mainFont);
         secondaryColorLabel.setFont(mainFont);
         bounceTimeLabel.setFont(mainFont);
+        pageLimitLabel.setFont(mainFont);
 
         impressionsValue.setFont(fontOfValue);
         uniquesValue.setFont(fontOfValue);
@@ -1938,10 +1963,13 @@ public class AdAuctionGUI extends JFrame {
 
     // converts a metric to a readable string
     public String toString(float metric) {
-        if (metric == (int) metric)
-            return String.format("%d", (int) metric);
-        else
-            return String.format("%.4g%n", metric); // change the 4 to change the dp
+        String dpMetric = String.valueOf(Math.round(metric * 10000.0) / 10000.0);
+
+        StringBuilder sb = new StringBuilder(dpMetric);
+        while (sb.length() > 0 && (sb.charAt(sb.length() - 1) == '0' || sb.charAt(sb.length() - 1) == '.')) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
     }
 
     // loads the files
@@ -1957,43 +1985,6 @@ public class AdAuctionGUI extends JFrame {
             gui.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
             campaignController.createCampaign(impressionsFileLocation, clickFileLocation, serverFileLocation);
-            createMetrics(campaignController.createMetrics());
-            createCharts(campaignController.createCharts());
-            createHistogram(campaignController.createCharts());
-
-            gui.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            changeFilters(true);
-
-            if(compareGrid != null) {
-                menu.remove(compareGrid);
-                menu.revalidate();
-                menu.repaint();
-            }
-
-            createCompareGrid();
-            metricsGrid.setVisible(true);
-            chartsGrid.setVisible(false);
-            histogramGrid.setVisible(false);
-            compareGrid.setVisible(false);
-            settingsGrid.setVisible(false);
-
-            countCharts = 0;
-        }).start();
-    }
-
-    // fast load the campaign !! TESTING ONLY !!
-    public void fastCreateCampaign() {
-        new Thread(() -> {
-            if (filesMenu!=null){
-                loadCampaignButton.setEnabled(true);
-                menu.remove(filesMenu);
-                menu.revalidate();
-                menu.repaint();
-            }
-            changeFilters(false);
-            gui.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-            campaignController.createCampaign("Logs/impression_log.csv", "Logs/click_log.csv", "Logs/server_log.csv");
             createMetrics(campaignController.createMetrics());
             createCharts(campaignController.createCharts());
             createHistogram(campaignController.createCharts());
@@ -2034,6 +2025,9 @@ public class AdAuctionGUI extends JFrame {
         chartsIncomeBox.setEnabled(enable);
         chartsStartDatePicker.setEnabled(enable);
         chartsEndDatePicker.setEnabled(enable);
+
+        pageLimitComboBox.setEnabled(enable);
+        bounceTimeComboBox.setEnabled(enable);
     }
 
     // displays the metrics when loaded
@@ -2073,7 +2067,7 @@ public class AdAuctionGUI extends JFrame {
 
     // displays the updated metrics
     public void updateMetrics() {
-        impressionsValue = new JLabel(String.valueOf(metricController.getImpressionsNo()));
+        impressionsValue = new JLabel(toString(metricController.getImpressionsNo()));
         impressionsValue.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         impressionsValue.setFont(fontOfValue);
         impressionsBox.remove(0);
