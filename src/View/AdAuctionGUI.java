@@ -779,11 +779,11 @@ public class AdAuctionGUI extends JFrame {
             DateModel<?> model = metricsStartDatePicker.getModel();
 
             String date = model.getYear() + "-";
-            if (toString(model.getMonth()).length() == 1) {
+            if ((model.getMonth() + 1) < 10) {
                 date += "0";
             }
             date += (model.getMonth() + 1) + "-";
-            if (toString(model.getDay()).length() == 1) {
+            if (model.getDay() < 10) {
                 date += "0";
             }
             date += model.getDay() + " 00:00:00";
@@ -819,11 +819,11 @@ public class AdAuctionGUI extends JFrame {
             DateModel<?> model = metricsEndDatePicker.getModel();
 
             String date = model.getYear() + "-";
-            if (toString(model.getMonth()).length() == 1) {
+            if ((model.getMonth() + 1) < 10) {
                 date += "0";
             }
             date += (model.getMonth() + 1) + "-";
-            if (toString(model.getDay()).length() == 1) {
+            if (model.getDay() < 10) {
                 date += "0";
             }
             date += model.getDay() + " 00:00:00";
@@ -1293,15 +1293,14 @@ public class AdAuctionGUI extends JFrame {
             DateModel<?> model = chartsStartDatePicker.getModel();
 
             String date = model.getYear() + "-";
-            if (toString(model.getMonth()).length() == 1) {
+            if ((model.getMonth() + 1) < 10) {
                 date += "0";
             }
             date += (model.getMonth() + 1) + "-";
-            if (toString(model.getDay()).length() == 1) {
+            if (model.getDay() < 10) {
                 date += "0";
             }
             date += model.getDay() + " 00:00:00";
-
             arrayOfChoicesChart.set(5, date);
             recalculateCharts();
         });
@@ -1333,11 +1332,11 @@ public class AdAuctionGUI extends JFrame {
             DateModel<?> model = chartsEndDatePicker.getModel();
 
             String date = model.getYear() + "-";
-            if (toString(model.getMonth()).length() == 1) {
+            if ((model.getMonth() + 1) < 10) {
                 date += "0";
             }
             date += (model.getMonth() + 1) + "-";
-            if (toString(model.getDay()).length() == 1) {
+            if (model.getDay() < 10) {
                 date += "0";
             }
             date += model.getDay() + " 00:00:00";
